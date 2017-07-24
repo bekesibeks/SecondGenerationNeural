@@ -8,14 +8,14 @@ import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 
-public class CarModel {
+public class Car {
 
 	private int direction = CAR_DEFAULT_DIRECTION;
 	private double speed = CAR_DEFAULT_SPEED;
 
 	private Group carView;
 
-	public CarModel() {
+	public Car() {
 		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
 		carBody.setId("carBody");
 

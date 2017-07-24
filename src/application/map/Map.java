@@ -4,15 +4,17 @@ import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
+import static application.shared.Constants.CAR_RADAR_RANGE;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import application.car.CarModel;
-import application.factories.RadarFactory;
+import application.car.Car;
+import application.factories.Radar;
 import application.factories.TrackFactory;
+import application.shared.Constants;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -35,23 +37,22 @@ public class Map {
 	public DoubleProperty rightFrontLineDistance = new SimpleDoubleProperty();
 	public DoubleProperty leftFrontLineDistance = new SimpleDoubleProperty();
 	public DoubleProperty frontLineDistance = new SimpleDoubleProperty();
-
-	private final CarModel car;
-	private final Group mapGroup;
-
-	private final List<Line> trackLines;
-	private final RadarFactory radarModel;
-
 	public BooleanProperty leftPressed = new SimpleBooleanProperty();
 	public BooleanProperty rightPressed = new SimpleBooleanProperty();
 
+	private final Car car;
+	private final Radar radar;
 	private Circle radarCentralPoint;
 
-	public Map(CarModel car) {
+	private final Group mapGroup;
+	private final List<Line> trackLines;
+
+	public Map(Car car) {
 		this.car = car;
+
 		trackLines = new ArrayList<>();
 		mapGroup = new Group();
-		radarModel = new RadarFactory();
+		radar = new Radar();
 
 		trackLines.addAll(TrackFactory.buildTrackLines(1000, 700, 50, 50));
 		trackLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
@@ -62,20 +63,19 @@ public class Map {
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
 
-		radarModel.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
-		radarModel.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
+		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
+		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
 
-		radarCentralPoint = new Circle(1);
+		radarCentralPoint = new Circle(2);
 		radarCentralPoint.setFill(Color.RED);
 		radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
 		radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
 
 		mapGroup.getChildren().add(background);
-		mapGroup.getChildren().add(radarModel.getRadarView());
+		mapGroup.getChildren().add(radar.getRadarView());
 		mapGroup.getChildren().add(car.getCarView());
-		mapGroup.getChildren().addAll(trackLines);
 		mapGroup.getChildren().add(radarCentralPoint);
-
+		mapGroup.getChildren().addAll(trackLines);
 	}
 
 	public boolean updateMap(int rotation) {
@@ -84,13 +84,26 @@ public class Map {
 		 * Remove this shit after neural network wired in
 		 */
 		if (leftPressed.getValue() == true) {
-			rotation = -4;
+			rotation = -5;
 		}
 
 		if (rightPressed.getValue() == true) {
-			rotation = 4;
+			rotation = 5;
 		}
 
+		rotateCar(rotation);
+		moveCar();
+
+		calculateIntersect(radar.getFrontLine(), frontLineDistance);
+		calculateIntersect(radar.getLeftLine(), leftLineDistance);
+		calculateIntersect(radar.getLeftFrontLine(), leftFrontLineDistance);
+		calculateIntersect(radar.getRightLine(), rightLineDistance);
+		calculateIntersect(radar.getRightFrontLine(), rightFrontLineDistance);
+
+		return isAlive();
+	}
+
+	private void rotateCar(int rotation) {
 		Rotate turn = new Rotate(rotation);
 		turn.setPivotX(CAR_DEFAULT_LENGTH / 2);
 		turn.setPivotY(CAR_DEFAULT_WIDTH / 2);
@@ -100,26 +113,22 @@ public class Map {
 		radarTurn.setPivotY(0);
 
 		radarCentralPoint.getTransforms().add(radarTurn);
-		radarModel.getRadarView().getTransforms().add(turn);
+		radar.getRadarView().getTransforms().add(turn);
 		car.getCarView().getTransforms().add(turn);
 
 		car.setDirection(car.getDirection() + rotation);
+	}
 
-		car.getCarView().setTranslateX(car.getCarView().getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
-		car.getCarView().setTranslateY(car.getCarView().getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
+	private void moveCar() {
+		car.getCarView().setTranslateX(
+				car.getCarView().getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
+		car.getCarView().setTranslateY(
+				car.getCarView().getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
 
 		radarCentralPoint.setTranslateX(
 				radarCentralPoint.getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
 		radarCentralPoint.setTranslateY(
 				radarCentralPoint.getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
-
-		calculateIntersect(radarModel.getFrontLine(), frontLineDistance);
-		calculateIntersect(radarModel.getLeftLine(), leftLineDistance);
-		calculateIntersect(radarModel.getLeftFrontLine(), leftFrontLineDistance);
-		calculateIntersect(radarModel.getRightLine(), rightLineDistance);
-		calculateIntersect(radarModel.getRightFrontLine(), rightFrontLineDistance);
-
-		return isAlive();
 	}
 
 	private boolean isAlive() {
@@ -134,23 +143,34 @@ public class Map {
 	}
 
 	public double calculateIntersect(Line radarLine, DoubleProperty propertyToUpdate) {
-		double min = 300; // todo-line max lenght
+		double minDistance = calculateDistance(radarLine);
 		for (Line line : trackLines) {
 			Shape intersectPoint = Shape.intersect(line, radarLine);
 			if (intersectPoint.getLayoutBounds().getMaxX() > -1) {
-				double distanceX = Math
-						.abs(intersectPoint.getLayoutBounds().getMaxX() - radarCentralPoint.getTranslateX());
-				double distanceY = Math
-						.abs(intersectPoint.getLayoutBounds().getMaxY() - radarCentralPoint.getTranslateY());
-				double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+				Shape radarCentralCoordinate = Shape.intersect(radarLine, radarCentralPoint);
 
-				if (distance < min) {
-					min = distance;
+				double currentDistance = calculateDistance(intersectPoint.getLayoutBounds().getMaxX(),
+						intersectPoint.getLayoutBounds().getMaxY(), radarCentralCoordinate.getLayoutBounds().getMaxX(),
+						radarCentralCoordinate.getLayoutBounds().getMaxY());
+
+				if (currentDistance < minDistance) {
+					minDistance = currentDistance;
 				}
 			}
 		}
-		propertyToUpdate.set(min);
-		return min;
+		propertyToUpdate.set(minDistance);
+		return minDistance;
+	}
+
+	private double calculateDistance(Line line) {
+		return calculateDistance(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+	}
+
+	private double calculateDistance(double fromX, double fromY, double toX, double toY) {
+		double distanceX = Math.abs(fromX - toX);
+		double distanceY = Math.abs(fromY - toY);
+		double currentDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+		return currentDistance;
 	}
 
 	public Group getMapGroup() {

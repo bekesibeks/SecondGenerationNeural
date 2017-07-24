@@ -1,13 +1,14 @@
 package application.factories;
 
+import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_RADAR_RANGE;
 
-import application.shared.Constants;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-public class RadarFactory {
+public class Radar {
 
 	private static final Color DEFAULT_COLOR = Color.RED;
 	private final Group radarGroup;
@@ -17,7 +18,7 @@ public class RadarFactory {
 	private Line leftFrontLine;
 	private Line frontLine;
 
-	public RadarFactory() {
+	public Radar() {
 		radarGroup = new Group();
 		initLines();
 	}
@@ -25,23 +26,23 @@ public class RadarFactory {
 	private void initLines() {
 		leftLine = new Line(0, 0, 0, CAR_RADAR_RANGE);
 		leftLine.setStroke(DEFAULT_COLOR);
-		leftLine.setTranslateY(Constants.CAR_DEFAULT_WIDTH / 2);
+		leftLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
 		rightLine = new Line(0, 0, 0, -CAR_RADAR_RANGE);
 		rightLine.setStroke(DEFAULT_COLOR);
-		rightLine.setTranslateY(Constants.CAR_DEFAULT_WIDTH / 2);
+		rightLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
 		rightFrontLine = new Line(0, 0, -CAR_RADAR_RANGE, -CAR_RADAR_RANGE);
 		rightFrontLine.setStroke(DEFAULT_COLOR);
-		rightFrontLine.setTranslateY(Constants.CAR_DEFAULT_WIDTH / 2);
+		rightFrontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
 		leftFrontLine = new Line(0, 0, -CAR_RADAR_RANGE, CAR_RADAR_RANGE);
 		leftFrontLine.setStroke(DEFAULT_COLOR);
-		leftFrontLine.setTranslateY(Constants.CAR_DEFAULT_WIDTH / 2);
+		leftFrontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
 		frontLine = new Line(0, 0, -(CAR_RADAR_RANGE * 3 / 2), 0);
 		frontLine.setStroke(DEFAULT_COLOR);
-		frontLine.setTranslateY(Constants.CAR_DEFAULT_WIDTH / 2);
+		frontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
 		radarGroup.getChildren().add(leftLine);
 		radarGroup.getChildren().add(frontLine);

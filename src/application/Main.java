@@ -1,8 +1,11 @@
 package application;
 
-import application.car.CarModel;
+import java.awt.Robot;
+
+import application.car.Car;
 import application.map.Map;
 import application.view.ViewManager;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -10,13 +13,20 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 public class Main extends Application {
 	private static int X = 1500;
@@ -30,28 +40,34 @@ public class Main extends Application {
 			root.setId("background");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-			CarModel car = new CarModel();
+			Car car = new Car();
 			Map map = new Map(car);
 			Group mapGroup = map.getMapGroup();
-
-			mapGroup.setTranslateX(0);
-			mapGroup.setTranslateY(0);
 
 			ViewManager view = new ViewManager(map);
 			view.run();
 			
+			
 			addControlOptions(scene, map);
 			
 			Text textFront = new Text("Front distance : ");
+			textFront.textProperty().bind(map.frontLineDistance.asString().concat(": front"));
 			Text textRight = new Text("Right distance : ");
 			textRight.setTranslateY(40);
+			textRight.textProperty().bind(map.rightLineDistance.asString().concat(": right"));
 			Text textLeft = new Text("Left distance : ");
 			textLeft.setTranslateY(80);
+			textLeft.textProperty().bind(map.leftLineDistance.asString().concat(": left"));
 			Text textFrontLeft = new Text("Front left distance : ");
 			textFrontLeft.setTranslateY(120);
+			textFrontLeft.textProperty().bind(map.leftFrontLineDistance.asString().concat(": left front"));
 			Text textFrontRight = new Text("Front right  distance : ");
 			textFrontRight.setTranslateY(160);
-		
+			textFrontRight.textProperty().bind(map.rightFrontLineDistance.asString().concat(": right front"));
+			
+			ProgressBar pg = new ProgressBar();
+			pg.progressProperty().bind(map.frontLineDistance);
+			
 			Group textGroup = new Group();
 			textGroup.getChildren().add(textFront);
 			textGroup.getChildren().add(textRight);
@@ -63,6 +79,7 @@ public class Main extends Application {
 			
 			root.getChildren().add(mapGroup);
 			root.getChildren().add(textGroup);
+			root.getChildren().add(pg);
 
 			primaryStage.setScene(scene);
 			primaryStage.show();

@@ -16,4 +16,7 @@ public class Constants {
 	public static final double CAR_DEFAULT_SPEED = 10;
 	public static final int CAR_RADAR_RANGE = 200;
 	
+	
+	public static final double DEFAULT_FRAME_RATE = 30;
+	
 }

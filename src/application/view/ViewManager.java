@@ -3,6 +3,7 @@ package application.view;
 import static javafx.animation.Animation.INDEFINITE;
 
 import application.map.Map;
+import application.shared.Constants;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -19,7 +20,7 @@ public class ViewManager {
 	public void run() {
 		Timeline timeline = new Timeline();
 		timeline.setCycleCount(INDEFINITE);
-		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(30), event -> {
+		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(Constants.DEFAULT_FRAME_RATE), event -> {
 			boolean crashed = map.updateMap(rotation);
 			if (!crashed) {
 				timeline.stop();
