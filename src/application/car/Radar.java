@@ -1,4 +1,4 @@
-package application.factories;
+package application.car;
 
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_RADAR_RANGE;

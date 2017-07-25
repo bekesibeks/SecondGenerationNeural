@@ -24,8 +24,16 @@ public class ViewManager {
 			boolean crashed = map.updateMap(rotation);
 			if (!crashed) {
 				timeline.stop();
+				map.initMap();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				timeline.playFromStart();
 			}
 		}));
+		timeline.setDelay(Duration.seconds(1));
 		timeline.play();
 	}
 

@@ -65,8 +65,9 @@ public class Main extends Application {
 			textFrontRight.setTranslateY(160);
 			textFrontRight.textProperty().bind(map.rightFrontLineDistance.asString().concat(": right front"));
 			
-			ProgressBar pg = new ProgressBar();
+			ProgressBar pg = new ProgressBar(0.3);
 			pg.progressProperty().bind(map.frontLineDistance);
+			pg.setMinWidth(400);
 			
 			Group textGroup = new Group();
 			textGroup.getChildren().add(textFront);
@@ -76,6 +77,8 @@ public class Main extends Application {
 			textGroup.getChildren().add(textFrontRight);
 			textGroup.setTranslateX(1200);
 			textGroup.setTranslateY(200);
+			pg.setTranslateX(1300);
+			pg.setTranslateY(500);
 			
 			root.getChildren().add(mapGroup);
 			root.getChildren().add(textGroup);

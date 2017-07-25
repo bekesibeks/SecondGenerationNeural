@@ -1,10 +1,10 @@
 package application.map;
 
+import static application.shared.Constants.CAR_DEFAULT_DIRECTION;
 import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
-import static application.shared.Constants.CAR_RADAR_RANGE;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.car.Car;
-import application.factories.Radar;
+import application.car.Radar;
 import application.factories.TrackFactory;
-import application.shared.Constants;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -42,6 +41,7 @@ public class Map {
 
 	private final Car car;
 	private final Radar radar;
+	
 	private Circle radarCentralPoint;
 
 	private final Group mapGroup;
@@ -49,33 +49,43 @@ public class Map {
 
 	public Map(Car car) {
 		this.car = car;
-
 		trackLines = new ArrayList<>();
 		mapGroup = new Group();
 		radar = new Radar();
-
+		radarCentralPoint = new Circle(2);
+		
 		trackLines.addAll(TrackFactory.buildTrackLines(1000, 700, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
+		trackLines.addAll(TrackFactory.buildTrackLines(600, 300, 250, 250));
 
-		car.getCarView().setTranslateX(800);
-		car.getCarView().setTranslateY(100);
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
 
-		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
-		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
-
-		radarCentralPoint = new Circle(2);
-		radarCentralPoint.setFill(Color.RED);
-		radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
-		radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
+		initMap();
 
 		mapGroup.getChildren().add(background);
 		mapGroup.getChildren().add(radar.getRadarView());
 		mapGroup.getChildren().add(car.getCarView());
 		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(trackLines);
+	}
+
+	public void initMap() {
+
+		car.getCarView().setTranslateX(CAR_DEFAULT_X_COORDINATE);
+		car.getCarView().setTranslateY(CAR_DEFAULT_Y_COORDINATE);
+		car.setDirection(CAR_DEFAULT_DIRECTION);
+		
+		car.getCarView().getTransforms().clear();
+		radar.getRadarView().getTransforms().clear();
+		radarCentralPoint.getTransforms().clear();
+		
+		radarCentralPoint.setFill(Color.RED);
+		radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
+		radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
+
+		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
+		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
 	}
 
 	public boolean updateMap(int rotation) {

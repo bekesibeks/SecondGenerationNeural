@@ -8,13 +8,13 @@ import javafx.scene.shape.Line;
 
 public class TrackFactory {
 
-	public static List<Line> buildTrackLines(int outerSizeX, int outerSizeY, int startX, int startY) {
+	public static List<Line> buildTrackLines(int width, int length, int transitionX, int transitionY) {
 		List<Line> routes = new ArrayList<>();
 
-		Line up = new Line(startX, startY, startX + outerSizeX, startY);
-		Line down = new Line(startX, startY, startX, startY + outerSizeY);
-		Line left = new Line(startX + outerSizeX, startY, startX + outerSizeX, startY + outerSizeY);
-		Line right = new Line(startX, startY + outerSizeY, startX + outerSizeX, startY + outerSizeY);
+		Line up = new Line(transitionX, transitionY, transitionX + width, transitionY);
+		Line down = new Line(transitionX, transitionY, transitionX, transitionY + length);
+		Line left = new Line(transitionX + width, transitionY, transitionX + width, transitionY + length);
+		Line right = new Line(transitionX, transitionY + length, transitionX + width, transitionY + length);
 
 		routes.add(up);
 		routes.add(down);
