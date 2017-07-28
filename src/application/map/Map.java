@@ -68,6 +68,7 @@ public class Map {
 		mapGroup.getChildren().add(car.getCarView());
 		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(trackLines);
+		
 	}
 
 	public void initMap() {
@@ -104,13 +105,17 @@ public class Map {
 		rotateCar(rotation);
 		moveCar();
 
+		calculateRadarValues();
+
+		return isAlive();
+	}
+
+	public void calculateRadarValues() {
 		calculateIntersect(radar.getFrontLine(), frontLineDistance);
 		calculateIntersect(radar.getLeftLine(), leftLineDistance);
 		calculateIntersect(radar.getLeftFrontLine(), leftFrontLineDistance);
 		calculateIntersect(radar.getRightLine(), rightLineDistance);
 		calculateIntersect(radar.getRightFrontLine(), rightFrontLineDistance);
-
-		return isAlive();
 	}
 
 	private void rotateCar(int rotation) {
