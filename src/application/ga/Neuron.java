@@ -18,7 +18,7 @@ public class Neuron {
 	public Neuron(String id) {
 		this.id = id;
 		inConnections = new ArrayList<>();
-		threshold = RandomUtil.getRandomInRange(250);
+		threshold = RandomUtil.getRandomInRange(3);
 	}
 
 	public void activate() {

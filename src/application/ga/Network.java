@@ -5,7 +5,7 @@ import static application.ga.Neuron.sigmoid;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Network {
+public class Network implements Comparable<Network> {
 
 	private List<Neuron> inputLayer;
 	private List<Neuron> hiddenLayer;
@@ -39,9 +39,9 @@ public class Network {
 	private void feedInputData(List<Double> inputs) {
 		for (int i = 0; i < inputs.size(); i++) {
 			Neuron neuron = inputLayer.get(i);
-			Double input = inputs.get(i);
+			Double input = inputs.get(i)/300;
 
-			neuron.setOutput(sigmoid(neuron.getThreshold() + input));
+			neuron.setOutput(sigmoid(input));
 		}
 	}
 
@@ -106,6 +106,11 @@ public class Network {
 
 	public void setFitness(int fitness) {
 		this.fitness = fitness;
+	}
+
+	@Override
+	public int compareTo(Network o) {
+		return Integer.compare(o.fitness,fitness);
 	}
 
 }

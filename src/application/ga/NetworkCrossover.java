@@ -118,8 +118,8 @@ public class NetworkCrossover {
 
 	private static double mutate(double valueToMutate) {
 		double result = valueToMutate;
-		if (Math.random() < 0.1) {
-			double amount = valueToMutate * 0.2;
+		if (Math.random() < 0.5) {
+			double amount = valueToMutate * 0.05;
 
 			if (Math.random() < 0.5) {
 				result += amount;
