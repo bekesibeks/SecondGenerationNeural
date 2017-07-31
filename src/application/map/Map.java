@@ -89,7 +89,7 @@ public class Map {
 		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
 	}
 
-	public boolean updateMap(int rotation) {
+	public boolean updateMap(double rotation) {
 		calculateRadarValues();
 
 		// List<Double> inputs = new ArrayList<>();
@@ -109,12 +109,13 @@ public class Map {
 		/*
 		 * Remove this shit after neural network wired in
 		 */
-		// if (leftPressed.getValue() == true) {
-		// }
-		//
-		// if (rightPressed.getValue() == true) {
-		// rotation = 5;
-		// }
+		if (leftPressed.getValue() == true) {
+			rotation = -4;
+		}
+
+		if (rightPressed.getValue() == true) {
+			rotation = 4;
+		}
 
 		rotateCar(rotation);
 		moveCar();
@@ -130,7 +131,7 @@ public class Map {
 		calculateIntersect(radar.getRightFrontLine(), rightFrontLineDistance);
 	}
 
-	private void rotateCar(int rotation) {
+	private void rotateCar(double rotation) {
 		Rotate turn = new Rotate(rotation);
 		turn.setPivotX(CAR_DEFAULT_LENGTH / 2);
 		turn.setPivotY(CAR_DEFAULT_WIDTH / 2);

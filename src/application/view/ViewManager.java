@@ -47,7 +47,7 @@ public class ViewManager {
 
 			double rotation = rotationLeft + rotationRight;
 
-			crashed = map.updateMap((int) rotation);
+			crashed = map.updateMap(rotation);
 
 			if (!crashed) {
 				timeline.stop();

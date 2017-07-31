@@ -10,7 +10,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Car {
 
-	private int direction = CAR_DEFAULT_DIRECTION;
+	private double direction = CAR_DEFAULT_DIRECTION;
 	private double speed = CAR_DEFAULT_SPEED;
 
 	private Group carView;
@@ -23,11 +23,11 @@ public class Car {
 		carView.getChildren().add(carBody);
 	}
 
-	public int getDirection() {
+	public double getDirection() {
 		return direction;
 	}
 
-	public void setDirection(int direction) {
+	public void setDirection(double direction) {
 		this.direction = direction;
 	}
 
