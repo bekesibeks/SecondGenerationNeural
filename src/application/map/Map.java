@@ -56,7 +56,7 @@ public class Map {
 		radarCentralPoint = new Circle(2);
 
 		trackLines.addAll(TrackFactory.buildTrackLines(1000, 700, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
+		trackLines.addAll(TrackFactory.buildTrackLines(650, 350, 225, 225));
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");

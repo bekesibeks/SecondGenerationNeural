@@ -33,13 +33,14 @@ public class CrossoverUtil {
 
 		Genome randomGenome1 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
 		Genome randomGenome2 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
-		Genome randomGenome3 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
-		Genome randomGenome4 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
+		Genome randomGenome3 = new Genome(randomGenome1.getWeights().size());
+		Genome randomGenome4 = new Genome(randomGenome1.getWeights().size());
 
-		newPopulation.addAll(crossover(randomGenome1, randomGenome2));
-		newPopulation.addAll(crossover(randomGenome3, randomGenome4));
+		newPopulation.addAll(crossover(randomGenome1, randomGenome3));
+		newPopulation.addAll(crossover(randomGenome2, randomGenome4));
 
 		newPopulation.stream().forEach(CrossoverUtil::mutate);
+		
 		return newPopulation;
 	}
 

@@ -59,7 +59,7 @@ public class ViewManager {
 				timeline.playFromStart();
 			}
 		}));
-		timeline.setDelay(Duration.millis(200));
+		timeline.setDelay(Duration.millis(100));
 		timeline.setCycleCount(INDEFINITE);
 		timeline.play();
 	}

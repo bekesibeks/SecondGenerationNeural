@@ -1,6 +1,9 @@
 package application.ga.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import application.shared.RandomUtil;
 
 public class Genome implements Comparable<Genome> {
 
@@ -11,6 +14,13 @@ public class Genome implements Comparable<Genome> {
 	private double fitness;
 
 	public Genome() {
+	}
+	
+	public Genome(int numberOfWeights){
+		weights = new ArrayList<>();
+		for(int i=0;i<numberOfWeights;i++){
+			weights.add(RandomUtil.getRandomWeight());
+		}
 	}
 
 	public List<Double> getWeights() {
