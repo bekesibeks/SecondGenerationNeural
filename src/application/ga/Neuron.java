@@ -1,6 +1,6 @@
 package application.ga;
 
-import static application.ga.RandomUtil.getRandomInRange;
+import static application.shared.Constants.DEFAULT_BIAS;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -11,51 +11,54 @@ public class Neuron {
 
 	private String id;
 
-	private double output;
-	private double threshold;
 	private List<Connection> inConnections;
+	private Connection bias;
+	private int numberOfConnections;
 
-	public Neuron(String id) {
+	private double output;
+
+	public Neuron(String id, int numberOfConnections) {
 		this.id = id;
+		this.numberOfConnections = numberOfConnections;
+		this.bias = new Connection();
+		
 		inConnections = new ArrayList<>();
-		threshold = RandomUtil.getRandomInRange(3);
+		for(int i=0;i<numberOfConnections;i++) {
+			Connection connection = new Connection();
+			inConnections.add(connection);
+		}
 	}
 
-	public void activate() {
+	public double activate(List<Double> inputs) {
 		double sumOfInputs = 0;
-		for (Connection connection : inConnections) {
-			Neuron connectedNeuron = connection.getFromNeuron();
+		for (int i = 0; i < inConnections.size(); i++) {
+			double weight = inConnections.get(i).getWeight();
+			double input = inputs.get(i);
 
-			double weight = connection.getWeight();
-			double connectedNeuronOutput = connectedNeuron.getOutput();
-
-			sumOfInputs += (weight * connectedNeuronOutput);
+			sumOfInputs += (weight * input);
 		}
 
-		sumOfInputs += threshold;
+		sumOfInputs += bias.getWeight() * (DEFAULT_BIAS);
 
 		output = sigmoid(sumOfInputs);
+		return output;
 	}
-
-	public void addNeuronsAsConnection(List<Neuron> neurons) {
-		neurons.stream().forEach(this::buildConnectionToNeuron);
+	
+	public List<Connection> getWeights(){
+		List<Connection> weights = new ArrayList<>();
+		weights.addAll(inConnections);
+		weights.add(bias);
+		return weights;
 	}
-
+	
+	public static double sigmoid(double x) {
+		return (1.0 / (1.0 + (Math.exp(-x))));
+	}
+	
 	public void addConnection(Connection inConnection) {
 		inConnections.add(inConnection);
 	}
 
-	public static double sigmoid(double x) {
-		return (1.0 / (1.0 + (Math.exp(-x))));
-	}
-
-	private void buildConnectionToNeuron(Neuron neuron) {
-		Connection connection = new Connection();
-		connection.setFromNeuron(neuron);
-		connection.setToNeuron(this);
-		connection.setWeight(getRandomInRange(1));
-		inConnections.add(connection);
-	}
 
 	public String getId() {
 		return id;
@@ -81,19 +84,27 @@ public class Neuron {
 		this.inConnections = inConnections;
 	}
 
-	public double getThreshold() {
-		return threshold;
+	public Connection getBias() {
+		return bias;
 	}
 
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
+	public void setBias(Connection bias) {
+		this.bias = bias;
+	}
+
+	public int getNumberOfConnections() {
+		return numberOfConnections;
+	}
+
+	public void setNumberOfConnections(int numberOfConnections) {
+		this.numberOfConnections = numberOfConnections;
 	}
 
 	@Override
 	public String toString() {
 		NumberFormat FORMATTER = new DecimalFormat("#0.000");
-		return "Neuron [id=" + id + ", output=" + FORMATTER.format(output) + ", inConnections=" + inConnections + ", threshold="
-				+ threshold + "]";
+		return "Neuron [id=" + id + ", output=" + FORMATTER.format(output) + ", inConnections=" + inConnections
+				+ ", bias=" + bias + "]";
 	}
 
 }

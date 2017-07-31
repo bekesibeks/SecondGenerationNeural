@@ -1,11 +1,15 @@
 package application.ga;
 
+import static application.ga.RandomUtil.getRandomWeight;
+
 public class Connection {
 
 	private double weight;
-	private Neuron fromNeuron;
-	private Neuron toNeuron;
-
+	
+	public Connection() {
+		this.weight = getRandomWeight();
+	}
+	
 	public double getWeight() {
 		return weight;
 	}
@@ -14,29 +18,11 @@ public class Connection {
 		this.weight = weight;
 	}
 
-	public Neuron getFromNeuron() {
-		return fromNeuron;
-	}
-
-	public void setFromNeuron(Neuron fromNeuron) {
-		this.fromNeuron = fromNeuron;
-	}
-
-	public Neuron getToNeuron() {
-		return toNeuron;
-	}
-
-	public void setToNeuron(Neuron toNeuron) {
-		this.toNeuron = toNeuron;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder toString = new StringBuilder("");
-		toString.append(fromNeuron.getId());
 		toString.append(" Weight: ");
 		toString.append(weight);
-
 		return toString.toString();
 	}
 

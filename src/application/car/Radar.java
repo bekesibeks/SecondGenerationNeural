@@ -2,7 +2,9 @@ package application.car;
 
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_RADAR_RANGE;
+import static application.shared.Constants.CAR_RADAR_RANGE_DIAGONAL;
 
+import application.shared.Constants;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -32,15 +34,15 @@ public class Radar {
 		rightLine.setStroke(DEFAULT_COLOR);
 		rightLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
-		rightFrontLine = new Line(0, 0, -CAR_RADAR_RANGE, -CAR_RADAR_RANGE);
+		rightFrontLine = new Line(0, 0, -CAR_RADAR_RANGE_DIAGONAL, -CAR_RADAR_RANGE_DIAGONAL);
 		rightFrontLine.setStroke(DEFAULT_COLOR);
 		rightFrontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
-		leftFrontLine = new Line(0, 0, -CAR_RADAR_RANGE, CAR_RADAR_RANGE);
+		leftFrontLine = new Line(0, 0, -CAR_RADAR_RANGE_DIAGONAL, CAR_RADAR_RANGE_DIAGONAL);
 		leftFrontLine.setStroke(DEFAULT_COLOR);
 		leftFrontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
-		frontLine = new Line(0, 0, -(CAR_RADAR_RANGE * 3 / 2), 0);
+		frontLine = new Line(0, 0, -CAR_RADAR_RANGE, 0);
 		frontLine.setStroke(DEFAULT_COLOR);
 		frontLine.setTranslateY(CAR_DEFAULT_WIDTH / 2);
 
