@@ -1,4 +1,4 @@
-package application.ga;
+package application.ga.model;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class Network implements Comparable<Network> {
 	private NetworkLayer hiddenLayer;
 	private NetworkLayer outputLayer;
 
-	private int fitness;
+	private double fitness;
 
 	public Network(int inputLayerSize, int hiddenLayerSize, int outputLayerSize) {
 		inputLayer = new InputLayer();
@@ -20,21 +20,47 @@ public class Network implements Comparable<Network> {
 		List<Double> outputFromInputLayer = inputLayer.getNormalisedInput(inputs);
 		List<Double> outputFromHiddenLayer = hiddenLayer.activateLayer(outputFromInputLayer);
 		List<Double> networkOutput = outputLayer.activateLayer(outputFromHiddenLayer);
-
+			
+		System.out.println(this);
+		
 		return networkOutput;
 	}
 
-	public int getFitness() {
+	public double getFitness() {
 		return fitness;
 	}
 
-	public void setFitness(int fitness) {
+	public void setFitness(double fitness) {
 		this.fitness = fitness;
+	}
+
+	public InputLayer getInputLayer() {
+		return inputLayer;
+	}
+
+	public void setInputLayer(InputLayer inputLayer) {
+		this.inputLayer = inputLayer;
+	}
+
+	public NetworkLayer getHiddenLayer() {
+		return hiddenLayer;
+	}
+
+	public void setHiddenLayer(NetworkLayer hiddenLayer) {
+		this.hiddenLayer = hiddenLayer;
+	}
+
+	public NetworkLayer getOutputLayer() {
+		return outputLayer;
+	}
+
+	public void setOutputLayer(NetworkLayer outputLayer) {
+		this.outputLayer = outputLayer;
 	}
 
 	@Override
 	public int compareTo(Network o) {
-		return Integer.compare(o.fitness, fitness);
+		return Double.compare(o.fitness, fitness);
 	}
 
 	@Override

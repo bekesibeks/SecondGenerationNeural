@@ -1,26 +1,16 @@
 package application;
 
-import java.awt.Robot;
 
 import application.car.Car;
 import application.map.Map;
 import application.view.ViewManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 
 public class Main extends Application {
 	private static int X = 1500;

@@ -1,4 +1,4 @@
-package application.ga;
+package application.ga.model;
 
 import static application.shared.Constants.CAR_RADAR_RANGE;
 
@@ -21,9 +21,10 @@ public class InputLayer {
 		 * Order!!
 		 */
 		List<Double> normalisedInput = new ArrayList<>();
-		for (int i = 0; i < inputs.size(); i++) {
-			normalisedInput.add(normaliseInput(inputs.get(i)));
-		}
+		inputs.stream().forEach(input -> {
+			normalisedInput.add(normaliseInput(input));
+		});
+
 		this.inputs = normalisedInput;
 		return normalisedInput;
 	}

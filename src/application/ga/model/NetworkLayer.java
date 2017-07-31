@@ -1,4 +1,4 @@
-package application.ga;
+package application.ga.model;
 
 import java.util.ArrayList;
 import java.util.List;

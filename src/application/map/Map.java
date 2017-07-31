@@ -1,6 +1,5 @@
 package application.map;
 
-import static application.ga.NetworkCrossover.crossoverNetworks;
 import static application.shared.Constants.CAR_DEFAULT_DIRECTION;
 import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
@@ -10,15 +9,11 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import application.car.Car;
 import application.car.Radar;
 import application.factories.TrackFactory;
-import application.ga.Network;
-import application.ga.NetworkCrossover;
-import application.ga.Population;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,7 +42,6 @@ public class Map {
 
 	private final Car car;
 	private final Radar radar;
-	private final Population population;
 
 	private Circle radarCentralPoint;
 
@@ -60,10 +54,9 @@ public class Map {
 		mapGroup = new Group();
 		radar = new Radar();
 		radarCentralPoint = new Circle(2);
-		population = new Population();
 
 		trackLines.addAll(TrackFactory.buildTrackLines(1000, 700, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(600, 300, 250, 250));
+		trackLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
@@ -99,19 +92,19 @@ public class Map {
 	public boolean updateMap(int rotation) {
 		calculateRadarValues();
 
-		List<Double> inputs = new ArrayList<>();
-		inputs.add(frontLineDistance.get());
-		inputs.add(leftLineDistance.get());
-		inputs.add(rightLineDistance.get());
-		inputs.add(leftFrontLineDistance.get());
-		inputs.add(rightFrontLineDistance.get());
+		// List<Double> inputs = new ArrayList<>();
+		// inputs.add(frontLineDistance.get());
+		// inputs.add(leftLineDistance.get());
+		// inputs.add(rightLineDistance.get());
+		// inputs.add(leftFrontLineDistance.get());
+		// inputs.add(rightFrontLineDistance.get());
 
-		Network network = population.getNetworks().get(index % 4);
-		network.setFitness(network.getFitness() + 5);
-		List<Double> output = network.activateNetwork(inputs);
-		rotation += output.get(0) * -5;
-		rotation += output.get(1) * 5;
-		System.out.println(network);
+		// Network network = population.getNetworks().get(index % 4);
+		// network.setFitness(network.getFitness() + 5);
+		// List<Double> output = network.activateNetwork(inputs);
+		// rotation += output.get(0) * -5;
+		// rotation += output.get(1) * 5;
+		// System.out.println(network);
 
 		/*
 		 * Remove this shit after neural network wired in
@@ -125,7 +118,6 @@ public class Map {
 
 		rotateCar(rotation);
 		moveCar();
-
 
 		return isAlive();
 	}
@@ -170,27 +162,12 @@ public class Map {
 		for (Line line : trackLines) {
 			Shape intersect = Shape.intersect((Shape) car.getCarView().getChildren().get(0), line);
 			if (intersect.getLayoutBounds().getMaxX() > -1) {
-				if (index % 4 == 3) {
-					List<Network> networks = population.getNetworks();
-					Collections.sort(networks);
-					System.out.println(networks.get(0).getFitness()+" and "+networks.get(3).getFitness());
-					Network child2 = crossoverNetworks(networks.get(0), networks.get(1));
-					Network child3 = crossoverNetworks(networks.get(0), networks.get(2));
-					Network child4 = crossoverNetworks(networks.get(0), networks.get(3));
-					Network child1 = crossoverNetworks(networks.get(1), networks.get(2));
-					population.getNetworks().clear();
-					population.getNetworks().add(child1);
-					population.getNetworks().add(child2);
-					population.getNetworks().add(child3);
-					population.getNetworks().add(child4);
-					population.getNetworks().forEach(net->net.setFitness(0));
-				}
-				index++;
 				return false;
 			}
 		}
 
 		return true;
+
 	}
 
 	public double calculateIntersect(Line radarLine, DoubleProperty propertyToUpdate) {

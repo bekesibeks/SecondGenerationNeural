@@ -1,6 +1,6 @@
-package application.ga;
+package application.ga.model;
 
-import static application.ga.RandomUtil.getRandomWeight;
+import static application.shared.RandomUtil.getRandomWeight;
 
 public class Connection {
 
@@ -8,6 +8,10 @@ public class Connection {
 	
 	public Connection() {
 		this.weight = getRandomWeight();
+	}
+	
+	public Connection(double weight) {
+		this.weight = weight;
 	}
 	
 	public double getWeight() {
