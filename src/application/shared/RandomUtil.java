@@ -14,7 +14,7 @@ public class RandomUtil {
 	public static double getRandomWeight() {
 //		return no++;
 //		return 1.0;
-		return (Math.random() * 2) - 1.0;
+		return (Math.random() ) - 1.0;
 	}
 
 }

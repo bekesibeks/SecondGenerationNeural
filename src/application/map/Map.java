@@ -20,8 +20,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -46,17 +52,19 @@ public class Map {
 	private Circle radarCentralPoint;
 
 	private final Group mapGroup;
+	private final Group circleGroup;
 	private final List<Line> trackLines;
 
 	public Map(Car car) {
 		this.car = car;
 		trackLines = new ArrayList<>();
 		mapGroup = new Group();
+		circleGroup = new Group();
 		radar = new Radar();
 		radarCentralPoint = new Circle(2);
 
-		trackLines.addAll(TrackFactory.buildTrackLines(1000, 700, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(650, 350, 225, 225));
+		trackLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
+		trackLines.addAll(TrackFactory.buildTrackLines(700, 350, 200, 200));
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
@@ -68,7 +76,7 @@ public class Map {
 		mapGroup.getChildren().add(car.getCarView());
 		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(trackLines);
-
+		mapGroup.getChildren().addAll(circleGroup);
 	}
 
 	public void initMap() {
@@ -87,6 +95,7 @@ public class Map {
 
 		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
 		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
+
 	}
 
 	public boolean updateMap(double rotation) {
@@ -157,6 +166,8 @@ public class Map {
 				radarCentralPoint.getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
 		radarCentralPoint.setTranslateY(
 				radarCentralPoint.getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
+
+		putCircle(radarCentralPoint);
 	}
 
 	private boolean isAlive() {
@@ -200,6 +211,19 @@ public class Map {
 		double distanceY = Math.abs(fromY - toY);
 		double currentDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		return currentDistance;
+	}
+
+	private void putCircle(Circle radarCentralPoint2) {
+		Circle circle = new Circle(2);
+		circle.setFill(Color.ALICEBLUE);
+		circle.setTranslateX(radarCentralPoint2.getTranslateX());
+		circle.setTranslateY(radarCentralPoint2.getTranslateY());
+		circleGroup.getChildren().add(circle);
+
+	}
+
+	public Group getCircleGroup() {
+		return circleGroup;
 	}
 
 	public Group getMapGroup() {

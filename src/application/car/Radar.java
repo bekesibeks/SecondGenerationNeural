@@ -12,7 +12,7 @@ import javafx.scene.shape.Line;
 
 public class Radar {
 
-	private static final Color DEFAULT_COLOR = Color.RED;
+	private static final Color DEFAULT_COLOR = Color.TRANSPARENT;
 	private final Group radarGroup;
 	private Line leftLine;
 	private Line rightLine;

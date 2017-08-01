@@ -21,8 +21,6 @@ public class Network implements Comparable<Network> {
 		List<Double> outputFromHiddenLayer = hiddenLayer.activateLayer(outputFromInputLayer);
 		List<Double> networkOutput = outputLayer.activateLayer(outputFromHiddenLayer);
 			
-		System.out.println(this);
-		
 		return networkOutput;
 	}
 

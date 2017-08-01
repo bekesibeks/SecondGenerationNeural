@@ -38,7 +38,11 @@ public class Genome implements Comparable<Genome> {
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
 	}
-
+	@Override
+	public String toString() {
+		return "\ngenome: "+weights;
+	}
+	
 	@Override
 	public int compareTo(Genome o) {
 		return Double.compare(o.fitness, fitness);

@@ -1,6 +1,8 @@
 package application.ga;
 
+import static application.ga.RouletteWheelSelection.rouletteWheelSelection;
 import static application.shared.Constants.AMOUNT_OF_MUTATION;
+import static application.shared.Constants.NETWORK_POPULATION_SIZE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,25 +23,37 @@ public class CrossoverUtil {
 		Collections.sort(originalPopulation);
 
 		List<Genome> newPopulation = new ArrayList<>();
-
 		List<Genome> bestGenomes = selectBestGenomes(originalPopulation);
-
+		/*
+		 * 4 db
+		 */
 		for (int i = 0; i < bestGenomes.size() - 1; i++) {
-			List<Genome> firstChilds = crossover(bestGenomes.get(i), bestGenomes.get(i + 1));
-			List<Genome> secondChilds = crossover(bestGenomes.get(i), bestGenomes.get(i + 1));
-			newPopulation.addAll(firstChilds);
-			newPopulation.addAll(secondChilds);
+			for(int j = i+1; j<bestGenomes.size(); j++){
+				List<Genome> firstChilds = crossover(bestGenomes.get(i), bestGenomes.get(j));
+				List<Genome> firstChilds2 = crossover(bestGenomes.get(i), bestGenomes.get(j));
+				newPopulation.addAll(firstChilds);
+				newPopulation.addAll(firstChilds2);
+			}
+			
 		}
-
-		Genome randomGenome1 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
-		Genome randomGenome2 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
-		Genome randomGenome3 = new Genome(randomGenome1.getWeights().size());
-		Genome randomGenome4 = new Genome(randomGenome1.getWeights().size());
-
-		newPopulation.addAll(crossover(randomGenome1, randomGenome3));
-		newPopulation.addAll(crossover(randomGenome2, randomGenome4));
+		List<Genome> rouletteWheelSelection = rouletteWheelSelection(originalPopulation,NETWORK_POPULATION_SIZE-4);
+//		System.out.println("Roulette wheel selected genomes : "+rouletteWheelSelection);
+		for (int i = 0; i < rouletteWheelSelection.size() - 1; i+=2) {
+			List<Genome> firstChilds = crossover(rouletteWheelSelection.get(i), rouletteWheelSelection.get(i + 1));
+			newPopulation.addAll(firstChilds);
+		}
+	
+		
+//
+//		Genome randomGenome1 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
+//		Genome randomGenome2 = new Genome(randomGenome1.getWeights().size());
+//
+//		newPopulation.addAll(crossover(randomGenome1, randomGenome2));
+//		newPopulation.addAll(crossover(bestGenomes.get(0), bestGenomes.get(0)));
 
 		newPopulation.stream().forEach(CrossoverUtil::mutate);
+		newPopulation.add(bestGenomes.get(0));	
+		newPopulation.add(mutate(bestGenomes.get(0)));
 		
 		return newPopulation;
 	}
@@ -77,11 +91,6 @@ public class CrossoverUtil {
 			if (Math.random() < Constants.PROBABILITY_OF_MUTATION) {
 				Double currentWeight = genome.getWeights().get(i);
 				Double newWeight = currentWeight + RandomUtil.getRandomInRange(AMOUNT_OF_MUTATION);
-				if (newWeight.doubleValue() < -1) {
-					newWeight = -1.0;
-				} else if (newWeight.doubleValue() > 1) {
-					newWeight = 1.0;
-				}
 				genome.getWeights().set(i, newWeight);
 			}
 		}
@@ -89,7 +98,7 @@ public class CrossoverUtil {
 	}
 
 	private static List<Genome> selectBestGenomes(List<Genome> originalPopulation) {
-		return originalPopulation.subList(0, 4);
+		return originalPopulation.subList(0, 2);
 	}
 
 }

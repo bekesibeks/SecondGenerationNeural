@@ -41,7 +41,6 @@ public class ViewManager {
 
 			Network activeNetwork = agent.getActiveNetwork();
 			List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
-
 			double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 			double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
 
