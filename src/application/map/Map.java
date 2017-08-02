@@ -100,23 +100,8 @@ public class Map {
 
 	public boolean updateMap(double rotation) {
 		calculateRadarValues();
-
-		// List<Double> inputs = new ArrayList<>();
-		// inputs.add(frontLineDistance.get());
-		// inputs.add(leftLineDistance.get());
-		// inputs.add(rightLineDistance.get());
-		// inputs.add(leftFrontLineDistance.get());
-		// inputs.add(rightFrontLineDistance.get());
-
-		// Network network = population.getNetworks().get(index % 4);
-		// network.setFitness(network.getFitness() + 5);
-		// List<Double> output = network.activateNetwork(inputs);
-		// rotation += output.get(0) * -5;
-		// rotation += output.get(1) * 5;
-		// System.out.println(network);
-
 		/*
-		 * Remove this shit after neural network wired in
+		 * Remove manual control after test phase
 		 */
 		if (leftPressed.getValue() == true) {
 			rotation = -4;

@@ -16,45 +16,36 @@ import application.shared.RandomUtil;
 public class CrossoverUtil {
 
 	/*
-	 * Select the top 4 genome. Crossover them twice to make 12 child. Create 4 more
-	 * totally random child to keep up the diversity. Desired result : 12 well
-	 * fitness individual, 4 random
+	 * Select the top 2 genome. Crossover them twice to make 4 child. 
+	 * Then apply class roulett wheel selection. 
+	 * Add 1 tottaly random genome to keep up diversity
 	 */
 	public static List<Genome> crossoverGenomes(List<Genome> originalPopulation) {
 		Collections.sort(originalPopulation);
 
 		List<Genome> newPopulation = new ArrayList<>();
 		List<Genome> bestGenomes = selectBestGenomes(originalPopulation);
-		/*
-		 * 4 db
-		 */
+		
 		for (int i = 0; i < bestGenomes.size() - 1; i++) {
-			for(int j = i+1; j<bestGenomes.size(); j++){
-				List<Genome> firstChilds = crossover(bestGenomes.get(i), bestGenomes.get(j));
+			for (int j = i + 1; j < bestGenomes.size(); j++) {
+				List<Genome> firstChilds1 = crossover(bestGenomes.get(i), bestGenomes.get(j));
 				List<Genome> firstChilds2 = crossover(bestGenomes.get(i), bestGenomes.get(j));
-				newPopulation.addAll(firstChilds);
+				newPopulation.addAll(firstChilds1);
 				newPopulation.addAll(firstChilds2);
 			}
-			
 		}
-		List<Genome> rouletteWheelSelection = rouletteWheelSelection(originalPopulation,NETWORK_POPULATION_SIZE-4);
-//		System.out.println("Roulette wheel selected genomes : "+rouletteWheelSelection);
-		for (int i = 0; i < rouletteWheelSelection.size() - 1; i+=2) {
+		newPopulation.add(bestGenomes.get(0));
+		
+		List<Genome> rouletteWheelSelection = rouletteWheelSelection(originalPopulation,
+				NETWORK_POPULATION_SIZE - newPopulation.size()-1);
+		for (int i = 0; i < rouletteWheelSelection.size() - 1; i += 2) {
 			List<Genome> firstChilds = crossover(rouletteWheelSelection.get(i), rouletteWheelSelection.get(i + 1));
 			newPopulation.addAll(firstChilds);
 		}
-	
 		
-//
-//		Genome randomGenome1 = originalPopulation.get((int) (Math.random() * originalPopulation.size()));
-//		Genome randomGenome2 = new Genome(randomGenome1.getWeights().size());
-//
-//		newPopulation.addAll(crossover(randomGenome1, randomGenome2));
-//		newPopulation.addAll(crossover(bestGenomes.get(0), bestGenomes.get(0)));
-
+		Genome randomGenome = new Genome(bestGenomes.get(0).getWeights().size()); 
+		newPopulation.add(randomGenome);
 		newPopulation.stream().forEach(CrossoverUtil::mutate);
-		newPopulation.add(bestGenomes.get(0));	
-		newPopulation.add(mutate(bestGenomes.get(0)));
 		
 		return newPopulation;
 	}
