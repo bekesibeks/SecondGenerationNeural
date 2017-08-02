@@ -112,7 +112,7 @@ public class Map {
 		}
 
 		rotateCar(rotation);
-		moveCar();
+		moveCar(rotation);
 
 		return isAlive();
 	}
@@ -141,16 +141,18 @@ public class Map {
 		car.setDirection(car.getDirection() + rotation);
 	}
 
-	private void moveCar() {
-		car.getCarView().setTranslateX(
-				car.getCarView().getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
-		car.getCarView().setTranslateY(
-				car.getCarView().getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
+	private void moveCar(double rotation) {
+		double speedLostCausedByRotation = Math.abs(rotation)/2;
 
-		radarCentralPoint.setTranslateX(
-				radarCentralPoint.getTranslateX() + cos((Math.PI / 180) * car.getDirection()) * car.getSpeed());
-		radarCentralPoint.setTranslateY(
-				radarCentralPoint.getTranslateY() + sin((Math.PI / 180) * car.getDirection()) * car.getSpeed());
+		car.getCarView().setTranslateX(car.getCarView().getTranslateX()
+				+ cos((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
+		car.getCarView().setTranslateY(car.getCarView().getTranslateY()
+				+ sin((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
+
+		radarCentralPoint.setTranslateX(radarCentralPoint.getTranslateX()
+				+ cos((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
+		radarCentralPoint.setTranslateY(radarCentralPoint.getTranslateY()
+				+ sin((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
 
 		putCircle(radarCentralPoint);
 	}
