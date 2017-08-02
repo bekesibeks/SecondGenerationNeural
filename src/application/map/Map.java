@@ -64,7 +64,7 @@ public class Map {
 		radarCentralPoint = new Circle(2);
 
 		trackLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(700, 350, 200, 200));
+		trackLines.addAll(TrackFactory.buildTrackLines(550, 200, 300, 300));
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
@@ -216,6 +216,7 @@ public class Map {
 	private void putCircle(Circle radarCentralPoint2) {
 		Circle circle = new Circle(2);
 		circle.setFill(Color.ALICEBLUE);
+		circle.setOpacity(0.4);
 		circle.setTranslateX(radarCentralPoint2.getTranslateX());
 		circle.setTranslateY(radarCentralPoint2.getTranslateY());
 		circleGroup.getChildren().add(circle);

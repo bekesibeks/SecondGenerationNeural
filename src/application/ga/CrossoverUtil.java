@@ -3,6 +3,7 @@ package application.ga;
 import static application.ga.RouletteWheelSelection.rouletteWheelSelection;
 import static application.shared.Constants.AMOUNT_OF_MUTATION;
 import static application.shared.Constants.NETWORK_POPULATION_SIZE;
+import static application.shared.RandomUtil.getRandomInRange;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +91,8 @@ public class CrossoverUtil {
 		for (int i = 0; i < genome.getWeights().size(); i++) {
 			if (Math.random() < Constants.PROBABILITY_OF_MUTATION) {
 				Double currentWeight = genome.getWeights().get(i);
-				Double newWeight = currentWeight + RandomUtil.getRandomInRange(AMOUNT_OF_MUTATION);
+				Double mutation = getRandomInRange(AMOUNT_OF_MUTATION * Constants.WEIGHT_RANGE);
+				Double newWeight = currentWeight + mutation;
 				genome.getWeights().set(i, newWeight);
 			}
 		}
