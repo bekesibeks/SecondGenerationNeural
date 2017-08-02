@@ -24,8 +24,7 @@ public class Main extends Application {
 			root.setId("background");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-			Car car = new Car();
-			Map map = new Map(car);
+			Map map = new Map();
 			Group mapGroup = map.getMapGroup();
 
 			ViewManager view = new ViewManager(map);

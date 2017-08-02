@@ -1,6 +1,6 @@
 package application.ga;
 
-import static application.shared.Constants.MAX_FITNESS;
+import static application.shared.Constants.NETWORK_MAX_FITNESS;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import application.shared.Constants;
 public class RouletteWheelSelection {
 
 	public static List<Genome> rouletteWheelSelection(List<Genome> genomes, int count) {
-		List<Double> weight = genomes.stream().map(genome -> genome.getFitness() / MAX_FITNESS).collect(toList());
+		List<Double> weight = genomes.stream().map(genome -> genome.getFitness() / NETWORK_MAX_FITNESS).collect(toList());
 		List<Genome> selectedGenomes = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
 			selectedGenomes.add(genomes.get(rouletteSelect(weight)));

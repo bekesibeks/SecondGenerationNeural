@@ -33,8 +33,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 public class Map {
-
-	private static int index = 0;
 	/*
 	 * TODO -> remove this shit after neural network wired in
 	 */
@@ -43,28 +41,30 @@ public class Map {
 	public DoubleProperty rightFrontLineDistance = new SimpleDoubleProperty();
 	public DoubleProperty leftFrontLineDistance = new SimpleDoubleProperty();
 	public DoubleProperty frontLineDistance = new SimpleDoubleProperty();
+	
 	public BooleanProperty leftPressed = new SimpleBooleanProperty();
 	public BooleanProperty rightPressed = new SimpleBooleanProperty();
 
 	private final Car car;
-	private final Radar radar;
 
-	private Circle radarCentralPoint;
+	private final Radar radar;
+	private final Circle radarCentralPoint;
 
 	private final Group mapGroup;
 	private final Group circleGroup;
-	private final List<Line> trackLines;
 
-	public Map(Car car) {
-		this.car = car;
-		trackLines = new ArrayList<>();
+	private final List<Line> mapLines;
+
+	public Map() {
+		car = new Car();
+		mapLines = new ArrayList<>();
 		mapGroup = new Group();
 		circleGroup = new Group();
 		radar = new Radar();
 		radarCentralPoint = new Circle(2);
 
-		trackLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
-		trackLines.addAll(TrackFactory.buildTrackLines(550, 200, 300, 300));
+		mapLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
+		mapLines.addAll(TrackFactory.buildTrackLines(450, 200, 300, 300));
 
 		Rectangle background = new Rectangle(1100, 800);
 		background.setId("mapBackground");
@@ -75,7 +75,7 @@ public class Map {
 		mapGroup.getChildren().add(radar.getRadarView());
 		mapGroup.getChildren().add(car.getCarView());
 		mapGroup.getChildren().add(radarCentralPoint);
-		mapGroup.getChildren().addAll(trackLines);
+		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(circleGroup);
 	}
 
@@ -158,7 +158,7 @@ public class Map {
 	}
 
 	private boolean isAlive() {
-		for (Line line : trackLines) {
+		for (Line line : mapLines) {
 			Shape intersect = Shape.intersect((Shape) car.getCarView().getChildren().get(0), line);
 			if (intersect.getLayoutBounds().getMaxX() > -1) {
 				return false;
@@ -171,7 +171,7 @@ public class Map {
 
 	public double calculateIntersect(Line radarLine, DoubleProperty propertyToUpdate) {
 		double minDistance = calculateDistance(radarLine);
-		for (Line line : trackLines) {
+		for (Line line : mapLines) {
 			Shape intersectPoint = Shape.intersect(line, radarLine);
 			if (intersectPoint.getLayoutBounds().getMaxX() > -1) {
 				Shape radarCentralCoordinate = Shape.intersect(radarLine, radarCentralPoint);

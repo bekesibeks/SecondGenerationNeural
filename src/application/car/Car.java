@@ -5,7 +5,12 @@ import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_SPEED;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 
+import java.net.URL;
+
+import application.Main;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Car {
@@ -17,7 +22,8 @@ public class Car {
 
 	public Car() {
 		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
-		carBody.setId("carBody");
+		URL url = Main.class.getResource("car.jpg");
+		carBody.setFill(new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
 
 		carView = new Group();
 		carView.getChildren().add(carBody);

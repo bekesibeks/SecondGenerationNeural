@@ -1,20 +1,18 @@
 package application.shared;
 
-public class RandomUtil {
+import static application.shared.Constants.NETWORK_WEIGHT_RANGE;
 
-	private static int no = 0;
+public class RandomUtil {
 
 	public static double getRandomInRange(double range) {
 		return (Math.random() * (range * 2) - range);
 	}
 
 	/*
-	 * Connection weight range : (-1,1)
+	 * Connection weight range : (-NETWORK_WEIGHT_RANGE,NETWORK_WEIGHT_RANGE)
 	 */
 	public static double getRandomWeight() {
-		// return no++;
-		// return 1.0;
-		return (Math.random() * Constants.WEIGHT_RANGE) - Constants.WEIGHT_RANGE / 2.0d;
+		return (Math.random() * (NETWORK_WEIGHT_RANGE * 2)) - NETWORK_WEIGHT_RANGE;
 	}
 
 }

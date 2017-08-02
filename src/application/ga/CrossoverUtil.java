@@ -1,8 +1,9 @@
 package application.ga;
 
 import static application.ga.RouletteWheelSelection.rouletteWheelSelection;
-import static application.shared.Constants.AMOUNT_OF_MUTATION;
+import static application.shared.Constants.MUTATION_AMOUNT;
 import static application.shared.Constants.NETWORK_POPULATION_SIZE;
+import static application.shared.Constants.NETWORK_WEIGHT_RANGE;
 import static application.shared.RandomUtil.getRandomInRange;
 
 import java.util.ArrayList;
@@ -16,16 +17,16 @@ import application.shared.RandomUtil;
 public class CrossoverUtil {
 
 	/*
-	 * Select the top 2 genome. Crossover them twice to make 4 child. 
-	 * Then apply class roulett wheel selection. 
-	 * Add 1 tottaly random genome to keep up diversity
+	 * Select the top 2 genome. Crossover them twice to make 4 child. Then apply
+	 * class roulett wheel selection. Add 1 tottaly random genome to keep up
+	 * diversity
 	 */
 	public static List<Genome> crossoverGenomes(List<Genome> originalPopulation) {
 		Collections.sort(originalPopulation);
 
 		List<Genome> newPopulation = new ArrayList<>();
 		List<Genome> bestGenomes = selectBestGenomes(originalPopulation);
-		
+
 		for (int i = 0; i < bestGenomes.size() - 1; i++) {
 			for (int j = i + 1; j < bestGenomes.size(); j++) {
 				List<Genome> firstChilds1 = crossover(bestGenomes.get(i), bestGenomes.get(j));
@@ -35,18 +36,18 @@ public class CrossoverUtil {
 			}
 		}
 		newPopulation.add(bestGenomes.get(0));
-		
+
 		List<Genome> rouletteWheelSelection = rouletteWheelSelection(originalPopulation,
-				NETWORK_POPULATION_SIZE - newPopulation.size()-1);
+				NETWORK_POPULATION_SIZE - newPopulation.size() - 1);
 		for (int i = 0; i < rouletteWheelSelection.size() - 1; i += 2) {
 			List<Genome> firstChilds = crossover(rouletteWheelSelection.get(i), rouletteWheelSelection.get(i + 1));
 			newPopulation.addAll(firstChilds);
 		}
-		
-		Genome randomGenome = new Genome(bestGenomes.get(0).getWeights().size()); 
+
+		Genome randomGenome = new Genome(bestGenomes.get(0).getWeights().size());
 		newPopulation.add(randomGenome);
 		newPopulation.stream().forEach(CrossoverUtil::mutate);
-		
+
 		return newPopulation;
 	}
 
@@ -80,9 +81,9 @@ public class CrossoverUtil {
 
 	private static Genome mutate(Genome genome) {
 		for (int i = 0; i < genome.getWeights().size(); i++) {
-			if (Math.random() < Constants.PROBABILITY_OF_MUTATION) {
+			if (Math.random() < Constants.MUTATION_PROBABILITY) {
 				Double currentWeight = genome.getWeights().get(i);
-				Double mutation = getRandomInRange(AMOUNT_OF_MUTATION * Constants.WEIGHT_RANGE);
+				Double mutation = getRandomInRange(MUTATION_AMOUNT * NETWORK_WEIGHT_RANGE);
 				Double newWeight = currentWeight + mutation;
 				genome.getWeights().set(i, newWeight);
 			}

@@ -1,6 +1,6 @@
 package application.ga.model;
 
-import static application.shared.Constants.DEFAULT_BIAS;
+import static application.shared.Constants.NETWORK_DEFAULT_BIAS;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -38,7 +38,7 @@ public class Neuron {
 			sumOfInputs += (weight * input);
 		}
 
-		sumOfInputs += bias.getWeight() * (DEFAULT_BIAS);
+		sumOfInputs += bias.getWeight() * (NETWORK_DEFAULT_BIAS);
 
 		output = sigmoid(sumOfInputs);
 		return output;
