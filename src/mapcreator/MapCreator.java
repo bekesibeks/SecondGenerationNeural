@@ -30,7 +30,7 @@ public class MapCreator {
 			return null;
 		} else {
 			Line line = new Line(previousPoint.getX(), previousPoint.getY(), newPoint.getX(), newPoint.getY());
-			line.setStroke(Color.BLACK);
+			line.setStroke(Color.YELLOW);
 			lines.add(line);
 			previousPoint = newPoint;
 			return line;

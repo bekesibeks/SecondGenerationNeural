@@ -5,21 +5,28 @@ import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
+import static application.shared.Constants.MAP_HEIGHT;
+import static application.shared.Constants.MAP_WIDTH;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.Main;
 import application.car.Car;
 import application.car.Radar;
 import application.factories.TrackFactory;
+import application.shared.Constants;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.HLineTo;
@@ -31,6 +38,7 @@ import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import mapcreator.MapLoader;
 
 public class Map {
 	/*
@@ -63,20 +71,25 @@ public class Map {
 		radar = new Radar();
 		radarCentralPoint = new Circle(2);
 
-		mapLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
-		mapLines.addAll(TrackFactory.buildTrackLines(450, 200, 300, 300));
+//		mapLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
+//		mapLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
+		
+		List<Line> loadMap = MapLoader.loadMap("test");
+		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
+		mapLines.addAll(loadMap);
 
-		Rectangle background = new Rectangle(1100, 800);
-		background.setId("mapBackground");
+		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
+		URL url = Main.class.getResource("map.jpg");
+		background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
 
 		initMap();
 
 		mapGroup.getChildren().add(background);
 		mapGroup.getChildren().add(radar.getRadarView());
-		mapGroup.getChildren().add(car.getCarView());
 		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(circleGroup);
+		mapGroup.getChildren().add(car.getCarView());
 	}
 
 	public void initMap() {
@@ -89,7 +102,7 @@ public class Map {
 		radar.getRadarView().getTransforms().clear();
 		radarCentralPoint.getTransforms().clear();
 
-		radarCentralPoint.setFill(Color.RED);
+		radarCentralPoint.setFill(Color.TRANSPARENT);
 		radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
 		radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
 
@@ -104,11 +117,11 @@ public class Map {
 		 * Remove manual control after test phase
 		 */
 		if (leftPressed.getValue() == true) {
-			rotation = -4;
+			rotation = -5;
 		}
 
 		if (rightPressed.getValue() == true) {
-			rotation = 4;
+			rotation = 5;
 		}
 
 		rotateCar(rotation);
@@ -202,8 +215,8 @@ public class Map {
 
 	private void putCircle(Circle radarCentralPoint2) {
 		Circle circle = new Circle(2);
-		circle.setFill(Color.ALICEBLUE);
-		circle.setOpacity(0.4);
+		circle.setFill(Color.BLACK);
+		circle.setOpacity(0.1);
 		circle.setTranslateX(radarCentralPoint2.getTranslateX());
 		circle.setTranslateY(radarCentralPoint2.getTranslateY());
 		circleGroup.getChildren().add(circle);

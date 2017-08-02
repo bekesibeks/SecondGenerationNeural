@@ -1,5 +1,6 @@
 package application.view;
 
+import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_MAX_ROTATION;
 import static javafx.animation.Animation.INDEFINITE;
 
@@ -34,8 +35,8 @@ public class ViewManager {
 
 			List<Double> inputs = new ArrayList<>();
 			inputs.add(map.frontLineDistance.get());
-			inputs.add(map.leftLineDistance.get());
-			inputs.add(map.rightLineDistance.get());
+			inputs.add(map.leftLineDistance.get()-CAR_DEFAULT_WIDTH/2);
+			inputs.add(map.rightLineDistance.get()-CAR_DEFAULT_WIDTH/2);
 			inputs.add(map.leftFrontLineDistance.get());
 			inputs.add(map.rightFrontLineDistance.get());
 

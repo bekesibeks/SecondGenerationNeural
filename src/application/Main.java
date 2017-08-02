@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 public class Main extends Application {
 	private static int X = 1500;
 	private static int Y = 900;
+	ViewManager view;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -26,9 +27,8 @@ public class Main extends Application {
 
 			Map map = new Map();
 			Group mapGroup = map.getMapGroup();
-
-			ViewManager view = new ViewManager(map);
-			view.run();
+			view = new ViewManager(map);
+//			view.run();
 			
 			
 			addControlOptions(scene, map);
@@ -83,6 +83,9 @@ public class Main extends Application {
 		scene.setOnKeyReleased(e -> {
 		    if (e.getCode() == KeyCode.LEFT) {
 		    	map.leftPressed.set(false);
+		    }
+		    if (e.getCode() == KeyCode.SPACE) {
+		    	view.run();
 		    }
 		    if (e.getCode() == KeyCode.RIGHT) {
 		    	map.rightPressed.set(false);
