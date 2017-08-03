@@ -1,17 +1,19 @@
 package application.ga;
 
 import static application.shared.Constants.CAR_DEFAULT_SPEED;
+import static application.shared.Constants.NETWORK_MAX_FITNESS;
 import static application.shared.Constants.NETWORK_POPULATION_SIZE;
 
 import application.ga.model.Network;
 import application.ga.model.Population;
+import application.shared.Constants;
 
 public class PopulationAgent {
 
 	private Population population;
 	private int activeNetworkIndex;
 	private double activeNetworkFitness = 0;
-	private int populationIndex=1;
+	private int populationIndex = 1;
 
 	public PopulationAgent() {
 		population = new Population(NETWORK_POPULATION_SIZE);
@@ -24,18 +26,25 @@ public class PopulationAgent {
 	}
 
 	public void triggerNetworkSwitch() {
-		System.out.println(
-				activeNetworkIndex+1 + " Fitness: " + activeNetworkFitness + ", " + activeNetworkFitness / 3000.0);
-		population.getNetworkByIndex(activeNetworkIndex).setFitness(activeNetworkFitness / 3000.0);
+		System.out.println(activeNetworkIndex + 1 + " Fitness: " + activeNetworkFitness + ", "
+				+ activeNetworkFitness / NETWORK_MAX_FITNESS);
+		population.getNetworkByIndex(activeNetworkIndex).setFitness(activeNetworkFitness / NETWORK_MAX_FITNESS);
 		activeNetworkIndex++;
 		activeNetworkFitness = 0;
 
 		if (lastNetwork()) {
 			activeNetworkIndex = 0;
 			population.buildNewGeneration();
-			System.out.println("Population finished : "+populationIndex);
+			System.out.println("Population finished : " + populationIndex);
 			populationIndex++;
 		}
+	}
+
+	public void triggerPopulationRefresh() {
+		populationIndex = 0;
+		activeNetworkFitness = 0;
+		activeNetworkIndex = 0;
+		population.initPopulation(NETWORK_POPULATION_SIZE);
 	}
 
 	private boolean lastNetwork() {

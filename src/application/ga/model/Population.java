@@ -10,7 +10,6 @@ import java.util.List;
 
 import application.ga.CrossoverUtil;
 import application.ga.NetworkGenomeConverter;
-import application.shared.Constants;
 import application.shared.NetworkLoader;
 
 public class Population {
@@ -22,18 +21,19 @@ public class Population {
 		networks = new ArrayList<>();
 		converter = new NetworkGenomeConverter();
 
-		if (SETTINGS_LOAD_PRETRAINED_NETWORK) {
-			for (int i = 0; i < populationSize; i++) {
-				Network network = NetworkLoader.loadNetwork();
-				networks.add(network);
-			}
-		} else {
+		initPopulation(populationSize);
+	}
 
-			for (int i = 0; i < populationSize; i++) {
-				Network network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE,
-						NETWORK_OUTPUT_LAYER_SIZE);
-				networks.add(network);
+	public void initPopulation(int populationSize) {
+		networks.clear();
+		for (int i = 0; i < populationSize; i++) {
+			Network network;
+			if (SETTINGS_LOAD_PRETRAINED_NETWORK) {
+				network = NetworkLoader.loadNetwork();
+			} else {
+				network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE, NETWORK_OUTPUT_LAYER_SIZE);
 			}
+			networks.add(network);
 		}
 	}
 
