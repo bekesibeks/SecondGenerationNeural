@@ -75,7 +75,7 @@ public class Map {
 //		mapLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
 		
 		List<Line> loadMap = MapLoader.loadMap("test");
-		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
+		loadMap.forEach(line -> line.setStroke(Color.TRANSPARENT));
 		mapLines.addAll(loadMap);
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);

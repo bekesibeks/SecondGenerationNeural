@@ -55,7 +55,8 @@ public class Network implements Comparable<Network> {
 	public void setOutputLayer(NetworkLayer outputLayer) {
 		this.outputLayer = outputLayer;
 	}
-
+	
+	
 	@Override
 	public int compareTo(Network o) {
 		return Double.compare(o.fitness, fitness);

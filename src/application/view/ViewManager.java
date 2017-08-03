@@ -12,6 +12,7 @@ import application.ga.model.Network;
 import application.ga.model.Population;
 import application.map.Map;
 import application.shared.Constants;
+import application.shared.NetworkLoader;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -35,12 +36,18 @@ public class ViewManager {
 
 			List<Double> inputs = new ArrayList<>();
 			inputs.add(map.frontLineDistance.get());
-			inputs.add(map.leftLineDistance.get()-CAR_DEFAULT_WIDTH/2);
-			inputs.add(map.rightLineDistance.get()-CAR_DEFAULT_WIDTH/2);
+			inputs.add(map.leftLineDistance.get() - CAR_DEFAULT_WIDTH / 2);
+			inputs.add(map.rightLineDistance.get() - CAR_DEFAULT_WIDTH / 2);
 			inputs.add(map.leftFrontLineDistance.get());
 			inputs.add(map.rightFrontLineDistance.get());
 
 			Network activeNetwork = agent.getActiveNetwork();
+			// if(agent.getActiveNetworkFitness() >
+			// Constants.NETWORK_MAX_FITNESS){
+			if (agent.getActiveNetworkFitness() > Constants.NETWORK_MAX_FITNESS) {
+//				NetworkLoader.saveNetwork(activeNetwork,agent.getActiveNetworkFitness());
+			}
+
 			List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
 			double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 			double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;

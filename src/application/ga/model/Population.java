@@ -3,12 +3,15 @@ package application.ga.model;
 import static application.shared.Constants.NETWORK_HIDDEN_LAYER_SIZE;
 import static application.shared.Constants.NETWORK_INPUT_LAYER_SIZE;
 import static application.shared.Constants.NETWORK_OUTPUT_LAYER_SIZE;
+import static application.shared.Constants.SETTINGS_LOAD_PRETRAINED_NETWORK;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import application.ga.CrossoverUtil;
 import application.ga.NetworkGenomeConverter;
+import application.shared.Constants;
+import application.shared.NetworkLoader;
 
 public class Population {
 
@@ -19,10 +22,18 @@ public class Population {
 		networks = new ArrayList<>();
 		converter = new NetworkGenomeConverter();
 
-		for (int i = 0; i < populationSize; i++) {
-			Network network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE,
-					NETWORK_OUTPUT_LAYER_SIZE);
-			networks.add(network);
+		if (SETTINGS_LOAD_PRETRAINED_NETWORK) {
+			for (int i = 0; i < populationSize; i++) {
+				Network network = NetworkLoader.loadNetwork();
+				networks.add(network);
+			}
+		} else {
+
+			for (int i = 0; i < populationSize; i++) {
+				Network network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE,
+						NETWORK_OUTPUT_LAYER_SIZE);
+				networks.add(network);
+			}
 		}
 	}
 
@@ -34,7 +45,7 @@ public class Population {
 		}
 		List<Genome> newGenomes = CrossoverUtil.crossoverGenomes(genomes);
 		networks.clear();
-		for(int i=0; i<newGenomes.size();i++) {
+		for (int i = 0; i < newGenomes.size(); i++) {
 			Network network = converter.buildNetworkFromGenome(newGenomes.get(i));
 			network.setFitness(0);
 			networks.add(network);

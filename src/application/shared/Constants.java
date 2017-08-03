@@ -10,7 +10,7 @@ public class Constants {
 	 */
 	public static final int CAR_DEFAULT_LENGTH = 70;
 	public static final int CAR_DEFAULT_WIDTH = 30;
-	public static final int CAR_DEFAULT_X_COORDINATE = 750;
+	public static final int CAR_DEFAULT_X_COORDINATE = 770;
 	public static final int CAR_DEFAULT_Y_COORDINATE = 70;
 	public static final int CAR_DEFAULT_DIRECTION = 180; // left
 	public static final double CAR_DEFAULT_SPEED = 8;
@@ -32,8 +32,9 @@ public class Constants {
 	public static final double MUTATION_PROBABILITY = 0.15;
 	public static final double MUTATION_AMOUNT = 0.2;
 	
-	public static final double DEFAULT_FRAME_RATE = 15;
+	public static final double DEFAULT_FRAME_RATE = 25;
 	
 	public static final double MAP_HEIGHT = 700;
 	public static final double MAP_WIDTH = 1100;
+	public static final boolean SETTINGS_LOAD_PRETRAINED_NETWORK = true;
 }

@@ -42,4 +42,8 @@ public class PopulationAgent {
 		return activeNetworkIndex == NETWORK_POPULATION_SIZE;
 	}
 
+	public double getActiveNetworkFitness() {
+		return activeNetworkFitness;
+	}
+
 }
