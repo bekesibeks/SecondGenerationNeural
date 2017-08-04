@@ -59,7 +59,7 @@ public class Map {
 	private final Circle radarCentralPoint;
 
 	private final Group mapGroup;
-	private final Group circleGroup;
+	private final Group carTrackGroup;
 
 	private final List<Line> mapLines;
 
@@ -67,13 +67,10 @@ public class Map {
 		car = new Car();
 		mapLines = new ArrayList<>();
 		mapGroup = new Group();
-		circleGroup = new Group();
+		carTrackGroup = new Group();
 		radar = new Radar();
 		radarCentralPoint = new Circle(2);
 
-//		mapLines.addAll(TrackFactory.buildTrackLines(1000, 650, 50, 50));
-//		mapLines.addAll(TrackFactory.buildTrackLines(700, 400, 200, 200));
-		
 		List<Line> loadMap = MapLoader.loadMap("test");
 		loadMap.forEach(line -> line.setStroke(Color.TRANSPARENT));
 		mapLines.addAll(loadMap);
@@ -88,7 +85,7 @@ public class Map {
 		mapGroup.getChildren().add(radar.getRadarView());
 		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(mapLines);
-		mapGroup.getChildren().addAll(circleGroup);
+		mapGroup.getChildren().addAll(carTrackGroup);
 		mapGroup.getChildren().add(car.getCarView());
 	}
 
@@ -108,7 +105,10 @@ public class Map {
 
 		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
 		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
+	}
 
+	public void clearTrackInMap() {
+		carTrackGroup.getChildren().clear();
 	}
 
 	public boolean updateMap(double rotation) {
@@ -219,12 +219,12 @@ public class Map {
 		circle.setOpacity(0.1);
 		circle.setTranslateX(radarCentralPoint2.getTranslateX());
 		circle.setTranslateY(radarCentralPoint2.getTranslateY());
-		circleGroup.getChildren().add(circle);
+		carTrackGroup.getChildren().add(circle);
 
 	}
 
 	public Group getCircleGroup() {
-		return circleGroup;
+		return carTrackGroup;
 	}
 
 	public Group getMapGroup() {

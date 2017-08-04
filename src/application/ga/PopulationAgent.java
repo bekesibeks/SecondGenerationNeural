@@ -6,7 +6,7 @@ import static application.shared.Constants.NETWORK_POPULATION_SIZE;
 
 import application.ga.model.Network;
 import application.ga.model.Population;
-import application.shared.Constants;
+import application.shared.PropertiesForBinding;
 
 public class PopulationAgent {
 
@@ -38,12 +38,14 @@ public class PopulationAgent {
 			System.out.println("Population finished : " + populationIndex);
 			populationIndex++;
 		}
+		PropertiesForBinding.populationProperty.set(populationIndex);
 	}
 
 	public void triggerPopulationRefresh() {
-		populationIndex = 0;
+		populationIndex = 1;
 		activeNetworkFitness = 0;
 		activeNetworkIndex = 0;
+		PropertiesForBinding.populationProperty.set(populationIndex);
 		population.initPopulation(NETWORK_POPULATION_SIZE);
 	}
 

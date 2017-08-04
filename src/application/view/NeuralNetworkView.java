@@ -50,7 +50,7 @@ public class NeuralNetworkView {
 			neuron.setTranslateX(30 + i * GRAP_BETWEEN_CIRCLES);
 			inputLayer.add(neuron);
 
-			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE).add(0.2));
+			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE*2).add(0.2));
 		}
 
 		for (int i = 0; i < NETWORK_HIDDEN_LAYER_SIZE; i++) {
@@ -63,7 +63,7 @@ public class NeuralNetworkView {
 			neuron.setTranslateY(120);
 			hiddenLayer.add(neuron);
 
-			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE).add(0.2));
+			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE*2).add(0.2));
 		}
 
 		for (int i = 0; i < NETWORK_OUTPUT_LAYER_SIZE; i++) {
