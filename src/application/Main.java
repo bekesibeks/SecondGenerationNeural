@@ -4,8 +4,10 @@ import static application.shared.Constants.MAP_HEIGHT;
 import static application.shared.Constants.MAP_WIDTH;
 
 import java.net.URL;
+import java.util.function.Supplier;
 
 import application.map.Map;
+import application.map.MapData;
 import application.shared.Constants;
 import application.shared.PropertiesForBinding;
 import application.view.NeuralNetworkView;
@@ -103,7 +105,7 @@ public class Main extends Application {
 			networkViewGroup.setTranslateX(Constants.MAP_WIDTH + 40);
 			networkViewGroup.setTranslateY(150);
 			root.getChildren().add(networkViewGroup);
-
+			
 			Text text = new Text("Pop : ");
 			text.setTranslateX(90);
 			text.setTranslateY(580);
@@ -118,30 +120,29 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
 	/*
 	 * For test phase only
 	 */
 	private void addControlOptions(Scene scene, Map map) {
 		scene.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.LEFT) {
-				map.leftPressed.set(true);
-			}
-			if (e.getCode() == KeyCode.RIGHT) {
-				map.rightPressed.set(true);
-			}
+//			if (e.getCode() == KeyCode.LEFT) {
+//				map.leftPressed.set(true);
+//			}
+//			if (e.getCode() == KeyCode.RIGHT) {
+//				map.rightPressed.set(true);
+//			}
 		});
 
 		scene.setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.LEFT) {
-				map.leftPressed.set(false);
-			}
+//			if (e.getCode() == KeyCode.LEFT) {
+//				map.leftPressed.set(false);
+//			}
 			if (e.getCode() == KeyCode.SPACE) {
 				view.run();
 			}
-			if (e.getCode() == KeyCode.RIGHT) {
-				map.rightPressed.set(false);
-			}
+//			if (e.getCode() == KeyCode.RIGHT) {
+//				map.rightPressed.set(false);
+//			}
 		});
 	}
 

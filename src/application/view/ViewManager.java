@@ -45,21 +45,20 @@ public class ViewManager {
 			boolean crashed = false;
 
 			List<Double> inputs = new ArrayList<>();
-			inputs.add(map.frontLineDistance.get());
-			inputs.add(map.leftLineDistance.get() - CAR_DEFAULT_WIDTH / 2);
-			inputs.add(map.rightLineDistance.get() - CAR_DEFAULT_WIDTH / 2);
-			inputs.add(map.leftFrontLineDistance.get());
-			inputs.add(map.rightFrontLineDistance.get());
+			inputs.add(map.getMapData().getFrontLineDistance());
+			inputs.add(map.getMapData().getLeftLineDistance() - CAR_DEFAULT_WIDTH / 2);
+			inputs.add(map.getMapData().getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
+			inputs.add(map.getMapData().getLeftFrontLineDistance());
+			inputs.add(map.getMapData().getRightFrontLineDistance());
 
 			Network activeNetwork = agent.getActiveNetwork();
 			if (agent.getActiveNetworkFitness() > NETWORK_MAX_FITNESS) {
 //				NetworkLoader.saveNetwork(activeNetwork,agent.getActiveNetworkFitness());
 			}
-
 			List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
 			double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 			double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
-
+			
 			double rotation = rotationLeft + rotationRight;
 			PropertiesForBinding.steerRotateProperty.set(rotation);
 

@@ -17,42 +17,18 @@ import java.util.List;
 import application.Main;
 import application.car.Car;
 import application.car.Radar;
-import application.factories.TrackFactory;
-import application.shared.Constants;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import mapcreator.MapLoader;
 
 public class Map {
-	/*
-	 * TODO -> remove this shit after neural network wired in
-	 */
-	public DoubleProperty leftLineDistance = new SimpleDoubleProperty();
-	public DoubleProperty rightLineDistance = new SimpleDoubleProperty();
-	public DoubleProperty rightFrontLineDistance = new SimpleDoubleProperty();
-	public DoubleProperty leftFrontLineDistance = new SimpleDoubleProperty();
-	public DoubleProperty frontLineDistance = new SimpleDoubleProperty();
-	
-	public BooleanProperty leftPressed = new SimpleBooleanProperty();
-	public BooleanProperty rightPressed = new SimpleBooleanProperty();
-
 	private final Car car;
 
 	private final Radar radar;
@@ -110,32 +86,28 @@ public class Map {
 	public void clearTrackInMap() {
 		carTrackGroup.getChildren().clear();
 	}
-
-	public boolean updateMap(double rotation) {
-		calculateRadarValues();
-		/*
-		 * Remove manual control after test phase
-		 */
-		if (leftPressed.getValue() == true) {
-			rotation = -4;
-		}
-
-		if (rightPressed.getValue() == true) {
-			rotation = 4;
-		}
-
-		rotateCar(rotation);
-		moveCar(rotation);
-
-		return isAlive();
+	
+	public MapData getMapData(){
+		MapData currentMapData = calculateRadarValues();
+		return currentMapData;
 	}
 
-	public void calculateRadarValues() {
-		calculateIntersect(radar.getFrontLine(), frontLineDistance);
-		calculateIntersect(radar.getLeftLine(), leftLineDistance);
-		calculateIntersect(radar.getLeftFrontLine(), leftFrontLineDistance);
-		calculateIntersect(radar.getRightLine(), rightLineDistance);
-		calculateIntersect(radar.getRightFrontLine(), rightFrontLineDistance);
+	public boolean updateMap(double rotation) {
+		rotateCar(rotation);
+		moveCar(rotation);
+		
+		return  isAlive();
+	}
+
+	public MapData calculateRadarValues() {
+		MapData mapData = new MapData();
+		mapData.setFrontLineDistance(calculateIntersect(radar.getFrontLine()));
+		mapData.setLeftLineDistance(calculateIntersect(radar.getLeftLine()));
+		mapData.setLeftFrontLineDistance(calculateIntersect(radar.getLeftFrontLine()));
+		mapData.setRightLineDistance(calculateIntersect(radar.getRightLine()));
+		mapData.setRightFrontLineDistance(calculateIntersect(radar.getRightFrontLine()));
+		
+		return mapData;
 	}
 
 	private void rotateCar(double rotation) {
@@ -182,7 +154,7 @@ public class Map {
 
 	}
 
-	public double calculateIntersect(Line radarLine, DoubleProperty propertyToUpdate) {
+	public double calculateIntersect(Line radarLine) {
 		double minDistance = calculateDistance(radarLine);
 		for (Line line : mapLines) {
 			Shape intersectPoint = Shape.intersect(line, radarLine);
@@ -198,7 +170,6 @@ public class Map {
 				}
 			}
 		}
-		propertyToUpdate.set(minDistance);
 		return minDistance;
 	}
 

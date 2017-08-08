@@ -34,7 +34,8 @@ public class Constants {
 	public static final double MUTATION_PROBABILITY = 0.15;
 	public static final double MUTATION_AMOUNT = 0.2;
 	
-	public static final double DEFAULT_FRAME_RATE = 12;
+	public static final double DEFAULT_FRAME_RATE = 
+;
 	
 	public static final double MAP_HEIGHT = 700;
 	public static final double MAP_WIDTH = 1100;
