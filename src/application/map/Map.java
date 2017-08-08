@@ -117,11 +117,11 @@ public class Map {
 		 * Remove manual control after test phase
 		 */
 		if (leftPressed.getValue() == true) {
-			rotation = -5;
+			rotation = -4;
 		}
 
 		if (rightPressed.getValue() == true) {
-			rotation = 5;
+			rotation = 4;
 		}
 
 		rotateCar(rotation);
