@@ -76,7 +76,7 @@ public class Map {
 		mapLines.addAll(loadMap);
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
-		URL url = Main.class.getResource("map.jpg");
+		URL url = Main.class.getResource("race_track.jpg");
 		background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
 
 		initMap();

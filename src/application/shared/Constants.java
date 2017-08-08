@@ -8,10 +8,10 @@ public class Constants {
 	/*
 	 * Car related properties
 	 */
-	public static final int CAR_DEFAULT_LENGTH = 70;
-	public static final int CAR_DEFAULT_WIDTH = 30;
+	public static final int CAR_DEFAULT_LENGTH = 50;
+	public static final int CAR_DEFAULT_WIDTH = 20;
 	
-	public static final int CAR_DEFAULT_X_COORDINATE = 770;
+	public static final int CAR_DEFAULT_X_COORDINATE = 400;
 	public static final int CAR_DEFAULT_Y_COORDINATE = 70;
 	
 	public static final int CAR_DEFAULT_DIRECTION = 180; // left

@@ -28,7 +28,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 public class Main extends Application {
-	private static int X = 1500;
+	private static int X = 1400;
 	private static int Y = (int) MAP_HEIGHT;
 	private ViewManager view;
 
@@ -51,7 +51,7 @@ public class Main extends Application {
 			buttonGroup.setTranslateX(Constants.MAP_WIDTH + 10);
 			buttonGroup.setTranslateY(10);
 
-			Button startButton = new Button(" start ");
+			Button startButton = new Button("start");
 			buttonGroup.getChildren().add(startButton);
 			startButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -62,9 +62,9 @@ public class Main extends Application {
 				}
 			});
 
-			Button restartButton = new Button(" stop ");
+			Button restartButton = new Button("stop ");
 			buttonGroup.getChildren().add(restartButton);
-			restartButton.setTranslateX(230);
+			restartButton.setTranslateX(130);
 
 			restartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -73,7 +73,7 @@ public class Main extends Application {
 				}
 			});
 
-			Button startPretrained = new Button(" start pretrained ");
+			Button startPretrained = new Button("start pretrained");
 			buttonGroup.getChildren().add(startPretrained);
 			startPretrained.setTranslateY(60);
 
@@ -89,8 +89,8 @@ public class Main extends Application {
 			Circle steer = new Circle(105);
 			URL url = Main.class.getResource("steer.jpg");
 			steer.setFill(new ImagePattern(new Image(url.toString(), 210, 210, false, true)));
-			steer.setTranslateX(1300);
-			steer.setTranslateY(590);
+			steer.setTranslateX(Constants.MAP_WIDTH + 130);
+			steer.setTranslateY(Constants.MAP_HEIGHT-steer.getRadius());
 			steer.rotateProperty().bind(PropertiesForBinding.steerRotateProperty.multiply(10));
 
 			addControlOptions(scene, map);
@@ -100,7 +100,7 @@ public class Main extends Application {
 			root.getChildren().add(buttonGroup);
 
 			Group networkViewGroup = networkView.buildView();
-			networkViewGroup.setTranslateX(Constants.MAP_WIDTH + 100);
+			networkViewGroup.setTranslateX(Constants.MAP_WIDTH + 40);
 			networkViewGroup.setTranslateY(150);
 			root.getChildren().add(networkViewGroup);
 

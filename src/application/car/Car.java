@@ -22,7 +22,7 @@ public class Car {
 
 	public Car() {
 		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
-		URL url = Main.class.getResource("car.jpg");
+		URL url = Main.class.getResource("car_40x15.jpg");
 		carBody.setFill(new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
 
 		carView = new Group();
