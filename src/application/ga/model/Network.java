@@ -1,5 +1,8 @@
 package application.ga.model;
 
+import static application.shared.Constants.CAR_DEFAULT_SPEED;
+import static application.shared.Constants.NETWORK_MAX_FITNESS;
+
 import java.util.List;
 
 import application.view.NeuralNetworkView;
@@ -11,8 +14,11 @@ public class Network implements Comparable<Network> {
 	private NetworkLayer outputLayer;
 
 	private double fitness;
+	private boolean isAlive;
 
 	public Network(int inputLayerSize, int hiddenLayerSize, int outputLayerSize) {
+		fitness = 0;
+		isAlive = true;
 		inputLayer = new InputLayer();
 		hiddenLayer = new NetworkLayer(hiddenLayerSize, inputLayerSize, "H");
 		outputLayer = new NetworkLayer(outputLayerSize, hiddenLayerSize, "O");
@@ -23,7 +29,8 @@ public class Network implements Comparable<Network> {
 		List<Double> outputFromHiddenLayer = hiddenLayer.activateLayer(outputFromInputLayer);
 		List<Double> networkOutput = outputLayer.activateLayer(outputFromHiddenLayer);
 
-		updateViewProperties(outputFromInputLayer, outputFromHiddenLayer, networkOutput);
+		// updateViewProperties(outputFromInputLayer, outputFromHiddenLayer,
+		// networkOutput);
 
 		return networkOutput;
 	}
@@ -41,8 +48,12 @@ public class Network implements Comparable<Network> {
 		}
 	}
 
+	public void increaseFitness() {
+		fitness += CAR_DEFAULT_SPEED;
+	}
+
 	public double getFitness() {
-		return fitness;
+		return fitness / NETWORK_MAX_FITNESS;
 	}
 
 	public void setFitness(double fitness) {
@@ -71,6 +82,14 @@ public class Network implements Comparable<Network> {
 
 	public void setOutputLayer(NetworkLayer outputLayer) {
 		this.outputLayer = outputLayer;
+	}
+
+	public boolean isAlive() {
+		return isAlive;
+	}
+
+	public void setAlive(boolean isAlive) {
+		this.isAlive = isAlive;
 	}
 
 	@Override

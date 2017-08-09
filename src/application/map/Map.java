@@ -17,6 +17,7 @@ import java.util.List;
 import application.Main;
 import application.car.Car;
 import application.car.Radar;
+import application.shared.Constants;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -29,10 +30,13 @@ import javafx.scene.transform.Rotate;
 import mapcreator.MapLoader;
 
 public class Map {
-	private final Car car;
+	// private final Car car;
+	private final List<Car> cars;
 
-	private final Radar radar;
-	private final Circle radarCentralPoint;
+	// private final Radar radar;
+	private final List<Radar> radars;
+	// private final Circle radarCentralPoint;
+	private final List<Circle> radarCentralPoints;
 
 	private final Group mapGroup;
 	private final Group carTrackGroup;
@@ -40,12 +44,12 @@ public class Map {
 	private final List<Line> mapLines;
 
 	public Map() {
-		car = new Car();
 		mapLines = new ArrayList<>();
+		cars = new ArrayList<>();
+		radars = new ArrayList<>();
+		radarCentralPoints = new ArrayList<>();
 		mapGroup = new Group();
 		carTrackGroup = new Group();
-		radar = new Radar();
-		radarCentralPoint = new Circle(2);
 
 		List<Line> loadMap = MapLoader.loadMap("test");
 		loadMap.forEach(line -> line.setStroke(Color.TRANSPARENT));
@@ -55,62 +59,79 @@ public class Map {
 		URL url = Main.class.getResource("race_track.jpg");
 		background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
 
-		initMap();
-
 		mapGroup.getChildren().add(background);
-		mapGroup.getChildren().add(radar.getRadarView());
-		mapGroup.getChildren().add(radarCentralPoint);
 		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(carTrackGroup);
-		mapGroup.getChildren().add(car.getCarView());
+
+		for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
+			Car car = new Car();
+			cars.add(car);
+
+			Radar radar = new Radar();
+			radars.add(radar);
+
+			Circle radarCentralPoint = new Circle(1);
+			radarCentralPoints.add(radarCentralPoint);
+
+			mapGroup.getChildren().add(radar.getRadarView());
+			mapGroup.getChildren().add(radarCentralPoint);
+			mapGroup.getChildren().add(car.getCarView());
+		}
+
+		initMap();
 	}
 
 	public void initMap() {
+		for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
+			Car car = cars.get(i);
+			Radar radar = radars.get(i);
+			Circle radarCentralPoint = radarCentralPoints.get(i);
 
-		car.getCarView().setTranslateX(CAR_DEFAULT_X_COORDINATE);
-		car.getCarView().setTranslateY(CAR_DEFAULT_Y_COORDINATE);
-		car.setDirection(CAR_DEFAULT_DIRECTION);
+			car.getCarView().setTranslateX(CAR_DEFAULT_X_COORDINATE);
+			car.getCarView().setTranslateY(CAR_DEFAULT_Y_COORDINATE);
+			car.setDirection(CAR_DEFAULT_DIRECTION);
 
-		car.getCarView().getTransforms().clear();
-		radar.getRadarView().getTransforms().clear();
-		radarCentralPoint.getTransforms().clear();
+			car.getCarView().getTransforms().clear();
+			radar.getRadarView().getTransforms().clear();
+			radarCentralPoint.getTransforms().clear();
 
-		radarCentralPoint.setFill(Color.TRANSPARENT);
-		radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
-		radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
+			radarCentralPoint.setFill(Color.TRANSPARENT);
+			radarCentralPoint.setTranslateX(CAR_DEFAULT_X_COORDINATE);
+			radarCentralPoint.setTranslateY(CAR_DEFAULT_Y_COORDINATE + CAR_DEFAULT_WIDTH / 2);
 
-		radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
-		radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
+			radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
+			radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
+		}
 	}
 
 	public void clearTrackInMap() {
 		carTrackGroup.getChildren().clear();
 	}
-	
-	public MapData getMapData(){
-		MapData currentMapData = calculateRadarValues();
+
+	public MapData getMapData(int index) {
+		MapData currentMapData = calculateRadarValues(index);
 		return currentMapData;
 	}
 
-	public boolean updateMap(double rotation) {
-		rotateCar(rotation);
-		moveCar(rotation);
-		
-		return  isAlive();
+	public boolean updateMap(double rotation, int carIndex) {
+		rotateCar(rotation, carIndex);
+		moveCar(rotation, carIndex);
+
+		return isAlive(carIndex);
 	}
 
-	public MapData calculateRadarValues() {
+	public MapData calculateRadarValues(int index) {
 		MapData mapData = new MapData();
-		mapData.setFrontLineDistance(calculateIntersect(radar.getFrontLine()));
-		mapData.setLeftLineDistance(calculateIntersect(radar.getLeftLine()));
-		mapData.setLeftFrontLineDistance(calculateIntersect(radar.getLeftFrontLine()));
-		mapData.setRightLineDistance(calculateIntersect(radar.getRightLine()));
-		mapData.setRightFrontLineDistance(calculateIntersect(radar.getRightFrontLine()));
-		
+		mapData.setFrontLineDistance(calculateIntersect(radars.get(index).getFrontLine(), index));
+		mapData.setLeftLineDistance(calculateIntersect(radars.get(index).getLeftLine(), index));
+		mapData.setLeftFrontLineDistance(calculateIntersect(radars.get(index).getLeftFrontLine(), index));
+		mapData.setRightLineDistance(calculateIntersect(radars.get(index).getRightLine(), index));
+		mapData.setRightFrontLineDistance(calculateIntersect(radars.get(index).getRightFrontLine(), index));
+
 		return mapData;
 	}
 
-	private void rotateCar(double rotation) {
+	private void rotateCar(double rotation, int carIndex) {
 		Rotate turn = new Rotate(rotation);
 		turn.setPivotX(CAR_DEFAULT_LENGTH / 2);
 		turn.setPivotY(CAR_DEFAULT_WIDTH / 2);
@@ -119,32 +140,40 @@ public class Map {
 		radarTurn.setPivotX(CAR_DEFAULT_LENGTH / 2);
 		radarTurn.setPivotY(0);
 
-		radarCentralPoint.getTransforms().add(radarTurn);
-		radar.getRadarView().getTransforms().add(turn);
-		car.getCarView().getTransforms().add(turn);
+		radarCentralPoints.get(carIndex).getTransforms().add(radarTurn);
+		radars.get(carIndex).getRadarView().getTransforms().add(turn);
+		cars.get(carIndex).getCarView().getTransforms().add(turn);
 
-		car.setDirection(car.getDirection() + rotation);
+		cars.get(carIndex).setDirection(cars.get(carIndex).getDirection() + rotation);
 	}
 
-	private void moveCar(double rotation) {
-		double speedLostCausedByRotation = Math.abs(rotation)/2;
+	private void moveCar(double rotation, int carIndex) {
+		double speedLostCausedByRotation = Math.abs(rotation) / 3;
 
-		car.getCarView().setTranslateX(car.getCarView().getTranslateX()
-				+ cos((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
-		car.getCarView().setTranslateY(car.getCarView().getTranslateY()
-				+ sin((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
+		cars.get(carIndex).getCarView()
+				.setTranslateX(cars.get(carIndex).getCarView().getTranslateX()
+						+ cos((Math.PI / 180) * cars.get(carIndex).getDirection())
+								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
+		cars.get(carIndex).getCarView()
+				.setTranslateY(cars.get(carIndex).getCarView().getTranslateY()
+						+ sin((Math.PI / 180) * cars.get(carIndex).getDirection())
+								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
 
-		radarCentralPoint.setTranslateX(radarCentralPoint.getTranslateX()
-				+ cos((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
-		radarCentralPoint.setTranslateY(radarCentralPoint.getTranslateY()
-				+ sin((Math.PI / 180) * car.getDirection()) * (car.getSpeed() - speedLostCausedByRotation));
+		radarCentralPoints.get(carIndex)
+				.setTranslateX(radarCentralPoints.get(carIndex).getTranslateX()
+						+ cos((Math.PI / 180) * cars.get(carIndex).getDirection())
+								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
+		radarCentralPoints.get(carIndex)
+				.setTranslateY(radarCentralPoints.get(carIndex).getTranslateY()
+						+ sin((Math.PI / 180) * cars.get(carIndex).getDirection())
+								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
 
-		putCircle(radarCentralPoint);
+		putCircle(radarCentralPoints.get(carIndex));
 	}
 
-	private boolean isAlive() {
+	private boolean isAlive(int carIndex) {
 		for (Line line : mapLines) {
-			Shape intersect = Shape.intersect((Shape) car.getCarView().getChildren().get(0), line);
+			Shape intersect = Shape.intersect((Shape) cars.get(carIndex).getCarView().getChildren().get(0), line);
 			if (intersect.getLayoutBounds().getMaxX() > -1) {
 				return false;
 			}
@@ -154,12 +183,12 @@ public class Map {
 
 	}
 
-	public double calculateIntersect(Line radarLine) {
+	public double calculateIntersect(Line radarLine, int carIndex) {
 		double minDistance = calculateDistance(radarLine);
 		for (Line line : mapLines) {
 			Shape intersectPoint = Shape.intersect(line, radarLine);
 			if (intersectPoint.getLayoutBounds().getMaxX() > -1) {
-				Shape radarCentralCoordinate = Shape.intersect(radarLine, radarCentralPoint);
+				Shape radarCentralCoordinate = Shape.intersect(radarLine, radarCentralPoints.get(carIndex));
 
 				double currentDistance = calculateDistance(intersectPoint.getLayoutBounds().getMaxX(),
 						intersectPoint.getLayoutBounds().getMaxY(), radarCentralCoordinate.getLayoutBounds().getMaxX(),

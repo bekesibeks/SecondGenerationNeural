@@ -25,6 +25,10 @@ public class PopulationAgent {
 		return population.getNetworkByIndex(activeNetworkIndex);
 	}
 
+	public Network getNetworkByIndex(int index) {
+		return population.getNetworkByIndex(index);
+	}
+
 	public void triggerNetworkSwitch() {
 		System.out.println(activeNetworkIndex + 1 + " Fitness: " + activeNetworkFitness + ", "
 				+ activeNetworkFitness / NETWORK_MAX_FITNESS);
@@ -42,11 +46,12 @@ public class PopulationAgent {
 	}
 
 	public void triggerPopulationRefresh() {
-		populationIndex = 1;
-		activeNetworkFitness = 0;
-		activeNetworkIndex = 0;
+		// activeNetworkFitness = 0;
+		// activeNetworkIndex = 0;
+		population.buildNewGeneration();
 		PropertiesForBinding.populationProperty.set(populationIndex);
-		population.initPopulation(NETWORK_POPULATION_SIZE);
+		populationIndex++;
+		// population.initPopulation(NETWORK_POPULATION_SIZE);
 	}
 
 	private boolean lastNetwork() {

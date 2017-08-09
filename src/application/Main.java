@@ -1,13 +1,10 @@
 package application;
 
 import static application.shared.Constants.MAP_HEIGHT;
-import static application.shared.Constants.MAP_WIDTH;
 
 import java.net.URL;
-import java.util.function.Supplier;
 
 import application.map.Map;
-import application.map.MapData;
 import application.shared.Constants;
 import application.shared.PropertiesForBinding;
 import application.view.NeuralNetworkView;
@@ -15,19 +12,17 @@ import application.view.ViewManager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class Main extends Application {
 	private static int X = 1400;
@@ -59,7 +54,7 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent e) {
 					Constants.SETTINGS_LOAD_PRETRAINED_NETWORK = false;
-					view.restart();
+					// view.restart();
 					view.run();
 				}
 			});
@@ -92,7 +87,7 @@ public class Main extends Application {
 			URL url = Main.class.getResource("steer.jpg");
 			steer.setFill(new ImagePattern(new Image(url.toString(), 210, 210, false, true)));
 			steer.setTranslateX(Constants.MAP_WIDTH + 130);
-			steer.setTranslateY(Constants.MAP_HEIGHT-steer.getRadius());
+			steer.setTranslateY(Constants.MAP_HEIGHT - steer.getRadius());
 			steer.rotateProperty().bind(PropertiesForBinding.steerRotateProperty.multiply(10));
 
 			addControlOptions(scene, map);
@@ -105,7 +100,7 @@ public class Main extends Application {
 			networkViewGroup.setTranslateX(Constants.MAP_WIDTH + 40);
 			networkViewGroup.setTranslateY(150);
 			root.getChildren().add(networkViewGroup);
-			
+
 			Text text = new Text("Pop : ");
 			text.setTranslateX(90);
 			text.setTranslateY(580);
@@ -120,29 +115,30 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+
 	/*
 	 * For test phase only
 	 */
 	private void addControlOptions(Scene scene, Map map) {
 		scene.setOnKeyPressed(e -> {
-//			if (e.getCode() == KeyCode.LEFT) {
-//				map.leftPressed.set(true);
-//			}
-//			if (e.getCode() == KeyCode.RIGHT) {
-//				map.rightPressed.set(true);
-//			}
+			// if (e.getCode() == KeyCode.LEFT) {
+			// map.leftPressed.set(true);
+			// }
+			// if (e.getCode() == KeyCode.RIGHT) {
+			// map.rightPressed.set(true);
+			// }
 		});
 
 		scene.setOnKeyReleased(e -> {
-//			if (e.getCode() == KeyCode.LEFT) {
-//				map.leftPressed.set(false);
-//			}
+			// if (e.getCode() == KeyCode.LEFT) {
+			// map.leftPressed.set(false);
+			// }
 			if (e.getCode() == KeyCode.SPACE) {
 				view.run();
 			}
-//			if (e.getCode() == KeyCode.RIGHT) {
-//				map.rightPressed.set(false);
-//			}
+			// if (e.getCode() == KeyCode.RIGHT) {
+			// map.rightPressed.set(false);
+			// }
 		});
 	}
 

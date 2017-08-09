@@ -12,7 +12,6 @@ import java.util.List;
 
 import application.ga.model.Genome;
 import application.shared.Constants;
-import application.shared.RandomUtil;
 
 public class CrossoverUtil {
 
@@ -23,6 +22,8 @@ public class CrossoverUtil {
 	 */
 	public static List<Genome> crossoverGenomes(List<Genome> originalPopulation) {
 		Collections.sort(originalPopulation);
+
+		System.out.println("originalPopulation : " + originalPopulation);
 
 		List<Genome> newPopulation = new ArrayList<>();
 		List<Genome> bestGenomes = selectBestGenomes(originalPopulation);

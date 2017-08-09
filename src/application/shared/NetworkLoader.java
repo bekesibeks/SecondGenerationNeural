@@ -1,7 +1,5 @@
 package application.shared;
 
-import static java.util.Objects.nonNull;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,13 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import application.ga.NetworkGenomeConverter;
 import application.ga.model.Genome;
 import application.ga.model.Network;
-import javafx.scene.shape.Line;
 
 public class NetworkLoader {
 
@@ -52,11 +48,11 @@ public class NetworkLoader {
 			weights = weights.replace(" ", "").replace("[", "").replace("]", "");
 			String[] split = weights.split(",");
 			List<Double> genomeWeights = new ArrayList<>();
-			for(int i = 0; i<split.length;i++){
+			for (int i = 0; i < split.length; i++) {
 				genomeWeights.add(Double.valueOf(split[i]));
 			}
 			genome.setWeights(genomeWeights);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

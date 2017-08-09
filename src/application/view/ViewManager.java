@@ -3,7 +3,6 @@ package application.view;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_MAX_ROTATION;
 import static application.shared.Constants.DEFAULT_FRAME_RATE;
-import static application.shared.Constants.NETWORK_MAX_FITNESS;
 import static javafx.animation.Animation.INDEFINITE;
 
 import java.util.ArrayList;
@@ -12,7 +11,8 @@ import java.util.List;
 import application.ga.PopulationAgent;
 import application.ga.model.Network;
 import application.map.Map;
-import application.shared.PropertiesForBinding;
+import application.map.MapData;
+import application.shared.Constants;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -33,7 +33,7 @@ public class ViewManager {
 	public void run() {
 		timeline.playFromStart();
 	}
-	
+
 	public void restart() {
 		timeline.stop();
 		agent.triggerPopulationRefresh();
@@ -42,33 +42,39 @@ public class ViewManager {
 
 	private void initTimeline() {
 		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(DEFAULT_FRAME_RATE), event -> {
-			boolean crashed = false;
+			boolean allCrashed = true;
+			for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
+				List<Double> inputs = new ArrayList<>();
+				MapData mapData = map.getMapData(i);
+				inputs.add(mapData.getFrontLineDistance());
+				inputs.add(mapData.getLeftLineDistance() - CAR_DEFAULT_WIDTH / 2);
+				inputs.add(mapData.getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
+				inputs.add(mapData.getLeftFrontLineDistance());
+				inputs.add(mapData.getRightFrontLineDistance());
 
-			List<Double> inputs = new ArrayList<>();
-			inputs.add(map.getMapData().getFrontLineDistance());
-			inputs.add(map.getMapData().getLeftLineDistance() - CAR_DEFAULT_WIDTH / 2);
-			inputs.add(map.getMapData().getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
-			inputs.add(map.getMapData().getLeftFrontLineDistance());
-			inputs.add(map.getMapData().getRightFrontLineDistance());
-
-			Network activeNetwork = agent.getActiveNetwork();
-			if (agent.getActiveNetworkFitness() > NETWORK_MAX_FITNESS) {
-//				NetworkLoader.saveNetwork(activeNetwork,agent.getActiveNetworkFitness());
+				Network activeNetwork = agent.getNetworkByIndex(i);
+				if (activeNetwork.isAlive()) {
+					List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
+					double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
+					double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
+					double rotation = rotationLeft + rotationRight;
+					// PropertiesForBinding.steerRotateProperty.set(rotation);
+					boolean currentCarIsAlive = map.updateMap(rotation, i);
+					if (currentCarIsAlive) {
+						allCrashed = false;
+						activeNetwork.increaseFitness();
+					} else {
+						activeNetwork.setAlive(false);
+					}
+				}
 			}
-			List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
-			double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
-			double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
-			
-			double rotation = rotationLeft + rotationRight;
-			PropertiesForBinding.steerRotateProperty.set(rotation);
 
-			crashed = map.updateMap(rotation);
-
-			if (!crashed) {
+			if (allCrashed) {
 				timeline.stop();
 				map.initMap();
-				agent.triggerNetworkSwitch();
-
+				agent.triggerPopulationRefresh();
+				// agent.triggerNetworkSwitch();
+				System.out.println("Population refresh");
 				waitALittle();
 
 				timeline.playFromStart();
@@ -77,10 +83,7 @@ public class ViewManager {
 		timeline.setDelay(Duration.millis(100));
 		timeline.setCycleCount(INDEFINITE);
 	}
-	
 
-	
-	
 	private void waitALittle() {
 		try {
 			Thread.sleep(100);

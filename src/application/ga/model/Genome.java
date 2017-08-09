@@ -15,10 +15,10 @@ public class Genome implements Comparable<Genome> {
 
 	public Genome() {
 	}
-	
-	public Genome(int numberOfWeights){
+
+	public Genome(int numberOfWeights) {
 		weights = new ArrayList<>();
-		for(int i=0;i<numberOfWeights;i++){
+		for (int i = 0; i < numberOfWeights; i++) {
 			weights.add(RandomUtil.getRandomWeight());
 		}
 	}
@@ -38,11 +38,12 @@ public class Genome implements Comparable<Genome> {
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
 	}
+
 	@Override
 	public String toString() {
-		return "\ngenome: "+weights;
+		return "\ngenome: " + fitness;
 	}
-	
+
 	@Override
 	public int compareTo(Genome o) {
 		return Double.compare(o.fitness, fitness);

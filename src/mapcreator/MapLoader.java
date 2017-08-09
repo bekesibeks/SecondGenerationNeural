@@ -25,7 +25,8 @@ public class MapLoader {
 			FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (Line line : lines) {
-				bw.write(line.getStartX() + "," + line.getStartY() + "," + line.getEndX() + "," + line.getEndY()+"\n");
+				bw.write(
+						line.getStartX() + "," + line.getStartY() + "," + line.getEndX() + "," + line.getEndY() + "\n");
 			}
 			bw.close();
 
@@ -33,23 +34,23 @@ public class MapLoader {
 			e.printStackTrace();
 		}
 	}
-	
-	public static List<Line> loadMap(String mapName){
+
+	public static List<Line> loadMap(String mapName) {
 		List<Line> lines = new ArrayList<>();
 		try {
 			File file = new File("./" + mapName + ".txt");
 			FileReader reader = new FileReader(file.getAbsolutePath());
 			BufferedReader bw = new BufferedReader(reader);
 			String line = bw.readLine();
-			while(nonNull(line) && !line.isEmpty()) {
+			while (nonNull(line) && !line.isEmpty()) {
 				String[] pointsString = line.split(",");
 				double[] points = new double[pointsString.length];
-				for(int i=0; i< pointsString.length;i++) {
-					points[i]=Double.parseDouble(pointsString[i]);
+				for (int i = 0; i < pointsString.length; i++) {
+					points[i] = Double.parseDouble(pointsString[i]);
 				}
-				Line newline = new Line(points[0],points[1],points[2],points[3]);
+				Line newline = new Line(points[0], points[1], points[2], points[3]);
 				lines.add(newline);
-				
+
 				line = bw.readLine();
 			}
 		} catch (Exception e) {
