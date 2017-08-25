@@ -50,11 +50,13 @@ public class Main extends Application {
 
 			Button startButton = new Button("start");
 			buttonGroup.getChildren().add(startButton);
+
 			startButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
 					Constants.SETTINGS_LOAD_PRETRAINED_NETWORK = false;
 					// view.restart();
+					view.initTimeline();
 					view.run();
 				}
 			});
@@ -66,7 +68,7 @@ public class Main extends Application {
 			restartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					view.restart();
+					view.stop();
 				}
 			});
 
@@ -78,7 +80,8 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent e) {
 					Constants.SETTINGS_LOAD_PRETRAINED_NETWORK = true;
-					view.restart();
+					// view.restart();
+					view.initTimeline();
 					view.run();
 				}
 			});
@@ -103,7 +106,7 @@ public class Main extends Application {
 
 			Text text = new Text("Pop : ");
 			text.setTranslateX(90);
-			text.setTranslateY(580);
+			text.setTranslateY(380);
 			text.setFill(Color.WHITE);
 			text.setId("text");
 			text.textProperty().bind(PropertiesForBinding.populationProperty.asString().concat("# GEN"));

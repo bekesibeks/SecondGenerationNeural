@@ -20,40 +20,37 @@ import javafx.util.Duration;
 public class ViewManager {
 
 	private final Map map;
-	private final PopulationAgent agent;
+	private PopulationAgent agent;
 	private final Timeline timeline;
 
 	public ViewManager(Map map) {
 		this.map = map;
-		this.agent = new PopulationAgent();
 		this.timeline = new Timeline();
-		initTimeline();
+		// initTimeline();
 	}
 
 	public void run() {
 		timeline.playFromStart();
 	}
 
-	public void restart() {
-		timeline.stop();
-		agent.triggerPopulationRefresh();
-		map.initMap();
-	}
-
-	private void initTimeline() {
+	public void initTimeline() {
+		agent = new PopulationAgent();
 		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(DEFAULT_FRAME_RATE), event -> {
 			boolean allCrashed = true;
+			long allCost = 0;
 			for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
-				List<Double> inputs = new ArrayList<>();
-				MapData mapData = map.getMapData(i);
-				inputs.add(mapData.getFrontLineDistance());
-				inputs.add(mapData.getLeftLineDistance() - CAR_DEFAULT_WIDTH / 2);
-				inputs.add(mapData.getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
-				inputs.add(mapData.getLeftFrontLineDistance());
-				inputs.add(mapData.getRightFrontLineDistance());
+				long currentTimeMillis = System.currentTimeMillis();
 
 				Network activeNetwork = agent.getNetworkByIndex(i);
 				if (activeNetwork.isAlive()) {
+					List<Double> inputs = new ArrayList<>();
+					MapData mapData = map.getMapData(i);
+					inputs.add(mapData.getFrontLineDistance());
+					inputs.add(mapData.getLeftLineDistance() - CAR_DEFAULT_WIDTH / 2);
+					inputs.add(mapData.getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
+					inputs.add(mapData.getLeftFrontLineDistance());
+					inputs.add(mapData.getRightFrontLineDistance());
+
 					List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
 					double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 					double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
@@ -67,7 +64,11 @@ public class ViewManager {
 						activeNetwork.setAlive(false);
 					}
 				}
+				long popCost = currentTimeMillis - System.currentTimeMillis();
+				allCost += popCost;
+				// System.out.println(i + 1 + ". population cost: " + popCost);
 			}
+			System.out.println("ALL cost : " + allCost);
 
 			if (allCrashed) {
 				timeline.stop();
@@ -82,6 +83,12 @@ public class ViewManager {
 		}));
 		timeline.setDelay(Duration.millis(100));
 		timeline.setCycleCount(INDEFINITE);
+	}
+
+	public void stop() {
+		timeline.stop();
+		map.initMap();
+
 	}
 
 	private void waitALittle() {
