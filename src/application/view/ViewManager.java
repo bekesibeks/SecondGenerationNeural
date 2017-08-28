@@ -50,14 +50,17 @@ public class ViewManager {
 					inputs.add(mapData.getRightLineDistance() - CAR_DEFAULT_WIDTH / 2);
 					inputs.add(mapData.getLeftFrontLineDistance());
 					inputs.add(mapData.getRightFrontLineDistance());
+					long currentTimeMillis2 = System.currentTimeMillis();
+					System.out.println(i + ". part time " + (currentTimeMillis2 - currentTimeMillis));
 
 					List<Double> activateNetwork = activeNetwork.activateNetwork(inputs);
 					double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 					double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
 					double rotation = rotationLeft + rotationRight;
 					// PropertiesForBinding.steerRotateProperty.set(rotation);
-					boolean currentCarIsAlive = map.updateMap(rotation, i);
+					boolean currentCarIsAlive = mapData.isAlive();
 					if (currentCarIsAlive) {
+						map.updateMap(rotation, i);
 						allCrashed = false;
 						activeNetwork.increaseFitness();
 					} else {

@@ -5,8 +5,6 @@ import static application.shared.Constants.NETWORK_MAX_FITNESS;
 
 import java.util.List;
 
-import application.view.NeuralNetworkView;
-
 public class Network implements Comparable<Network> {
 
 	private InputLayer inputLayer;
@@ -33,19 +31,6 @@ public class Network implements Comparable<Network> {
 		// networkOutput);
 
 		return networkOutput;
-	}
-
-	private void updateViewProperties(List<Double> outputFromInputLayer, List<Double> outputFromHiddenLayer,
-			List<Double> networkOutput) {
-		for (int i = 0; i < outputFromInputLayer.size(); i++) {
-			NeuralNetworkView.inputLayerOutputs.get(i).set(Math.abs(outputFromInputLayer.get(i)));
-		}
-		for (int i = 0; i < outputFromHiddenLayer.size(); i++) {
-			NeuralNetworkView.hiddenLayerOutputs.get(i).set(Math.abs(outputFromHiddenLayer.get(i)));
-		}
-		for (int i = 0; i < networkOutput.size(); i++) {
-			NeuralNetworkView.outputLayerOutputs.get(i).set(Math.abs(networkOutput.get(i)));
-		}
 	}
 
 	public void increaseFitness() {

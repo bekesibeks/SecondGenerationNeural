@@ -1,7 +1,5 @@
 package mapcreator;
 
-import java.awt.Point;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -35,7 +33,7 @@ public class MapAgent {
 		scene.setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.ENTER) {
 				System.out.println("save");
-				MapLoader.saveMap(creator.getLines(), "test");
+				MapLoader.saveMap(creator.getLines(), "map");
 			}
 
 			if (e.getCode() == KeyCode.SPACE) {

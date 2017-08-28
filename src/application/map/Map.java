@@ -2,6 +2,7 @@ package application.map;
 
 import static application.shared.Constants.CAR_DEFAULT_DIRECTION;
 import static application.shared.Constants.CAR_DEFAULT_LENGTH;
+import static application.shared.Constants.CAR_DEFAULT_SPEED;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
@@ -54,6 +55,7 @@ public class Map {
 		List<Line> loadMap = MapLoader.loadMap("test");
 		loadMap.forEach(line -> line.setStroke(Color.TRANSPARENT));
 		mapLines.addAll(loadMap);
+		System.out.println(mapLines.size());
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
 		URL url = Main.class.getResource("race_track.jpg");
@@ -113,20 +115,26 @@ public class Map {
 		return currentMapData;
 	}
 
-	public boolean updateMap(double rotation, int carIndex) {
+	public void updateMap(double rotation, int carIndex) {
 		rotateCar(rotation, carIndex);
 		moveCar(rotation, carIndex);
-
-		return isAlive(carIndex);
 	}
 
 	public MapData calculateRadarValues(int index) {
 		MapData mapData = new MapData();
+		mapData.setAlive(true);
 		mapData.setFrontLineDistance(calculateIntersect(radars.get(index).getFrontLine(), index));
 		mapData.setLeftLineDistance(calculateIntersect(radars.get(index).getLeftLine(), index));
 		mapData.setLeftFrontLineDistance(calculateIntersect(radars.get(index).getLeftFrontLine(), index));
 		mapData.setRightLineDistance(calculateIntersect(radars.get(index).getRightLine(), index));
 		mapData.setRightFrontLineDistance(calculateIntersect(radars.get(index).getRightFrontLine(), index));
+
+		if (mapData.getFrontLineDistance() < CAR_DEFAULT_SPEED || mapData.getLeftFrontLineDistance() < CAR_DEFAULT_SPEED
+				|| mapData.getRightFrontLineDistance() < CAR_DEFAULT_SPEED
+				|| mapData.getRightLineDistance() < CAR_DEFAULT_SPEED
+				|| mapData.getLeftLineDistance() < CAR_DEFAULT_SPEED) {
+			mapData.setAlive(false);
+		}
 
 		return mapData;
 	}
