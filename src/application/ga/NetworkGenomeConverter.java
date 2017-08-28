@@ -7,7 +7,6 @@ import static application.shared.Constants.NETWORK_OUTPUT_LAYER_SIZE;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import application.ga.model.Connection;
 import application.ga.model.Genome;
 import application.ga.model.Network;
@@ -18,7 +17,7 @@ public class NetworkGenomeConverter {
 
 	/*
 	 * Tested, works. TODO -> refactor it
-	 * 
+	 *
 	 */
 	public Network buildNetworkFromGenome(Genome genome) {
 		Network network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE, NETWORK_OUTPUT_LAYER_SIZE);
@@ -39,7 +38,6 @@ public class NetworkGenomeConverter {
 					neuron.getInConnections().set(j, connection);
 				}
 			}
-
 		}
 
 		for (int i = index; i < genome.getWeights().size() - 1; i += NETWORK_HIDDEN_LAYER_SIZE + 1) {
@@ -58,7 +56,7 @@ public class NetworkGenomeConverter {
 				}
 			}
 		}
-		
+
 		network.setFitness(genome.getFitness());
 		return network;
 	}
@@ -74,7 +72,7 @@ public class NetworkGenomeConverter {
 		Genome genome = new Genome();
 		genome.setWeights(weights);
 		genome.setFitness(network.getFitness());
-		
+
 		return genome;
 	}
 

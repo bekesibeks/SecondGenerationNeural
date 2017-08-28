@@ -23,8 +23,6 @@ public class CrossoverUtil {
 	public static List<Genome> crossoverGenomes(List<Genome> originalPopulation) {
 		Collections.sort(originalPopulation);
 
-		System.out.println("originalPopulation : " + originalPopulation);
-
 		List<Genome> newPopulation = new ArrayList<>();
 		List<Genome> bestGenomes = selectBestGenomes(originalPopulation);
 

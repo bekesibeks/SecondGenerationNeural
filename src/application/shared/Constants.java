@@ -11,7 +11,7 @@ public class Constants {
 	public static final int CAR_DEFAULT_LENGTH = 40;
 	public static final int CAR_DEFAULT_WIDTH = 15;
 
-	public static final int CAR_DEFAULT_X_COORDINATE = 350;
+	public static final int CAR_DEFAULT_X_COORDINATE = 240;
 	public static final int CAR_DEFAULT_Y_COORDINATE = 625;
 
 	public static final int CAR_DEFAULT_DIRECTION = 180; // left
@@ -30,14 +30,14 @@ public class Constants {
 	public static final int NETWORK_HIDDEN_LAYER_SIZE = 8;
 	public static final int NETWORK_OUTPUT_LAYER_SIZE = 2;
 
-	public static final int NETWORK_POPULATION_SIZE = 12;
+	public static final int NETWORK_POPULATION_SIZE = 14;
 	public static final double NETWORK_MAX_FITNESS = 10000.0d;
 	public static final double NETWORK_WEIGHT_RANGE = 10;
 
 	public static final double MUTATION_PROBABILITY = 0.15;
 	public static final double MUTATION_AMOUNT = 0.20;
 
-	public static final double DEFAULT_FRAME_RATE = 60;
+	public static final double DEFAULT_FRAME_RATE = 70;
 
 	public static final double MAP_HEIGHT = 700;
 	public static final double MAP_WIDTH = 1100;

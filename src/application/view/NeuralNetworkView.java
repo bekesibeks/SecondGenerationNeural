@@ -7,7 +7,6 @@ import static application.shared.Constants.NETWORK_OUTPUT_LAYER_SIZE;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.ga.model.Network;
 import application.shared.Constants;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -28,11 +27,11 @@ public class NeuralNetworkView {
 	private static List<Circle> inputLayer;
 	private static List<Circle> hiddenLayer;
 	private static List<Circle> outputLayer;
-	
+
 	private static List<Line> lines;
 
 	public NeuralNetworkView() {
-		lines =  new ArrayList<>();
+		lines = new ArrayList<>();
 		inputLayer = new ArrayList<>();
 		hiddenLayer = new ArrayList<>();
 		outputLayer = new ArrayList<>();
@@ -50,7 +49,7 @@ public class NeuralNetworkView {
 			neuron.setTranslateX(30 + i * GRAP_BETWEEN_CIRCLES);
 			inputLayer.add(neuron);
 
-			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE*2).add(0.2));
+			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE * 2).add(0.2));
 		}
 
 		for (int i = 0; i < NETWORK_HIDDEN_LAYER_SIZE; i++) {
@@ -63,7 +62,7 @@ public class NeuralNetworkView {
 			neuron.setTranslateY(120);
 			hiddenLayer.add(neuron);
 
-			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE*2).add(0.2));
+			neuron.opacityProperty().bind(property.multiply(Constants.NETWORK_WEIGHT_RANGE * 2).add(0.2));
 		}
 
 		for (int i = 0; i < NETWORK_OUTPUT_LAYER_SIZE; i++) {
@@ -72,24 +71,24 @@ public class NeuralNetworkView {
 
 			Circle neuron = new Circle(CIRCLE_SIZE);
 			neuron.setFill(Color.RED);
-			neuron.setTranslateX(80+i * GRAP_BETWEEN_CIRCLES);
+			neuron.setTranslateX(80 + i * GRAP_BETWEEN_CIRCLES);
 			neuron.setTranslateY(240);
 			outputLayer.add(neuron);
 
 			neuron.opacityProperty().bind(property.add(0.2));
 		}
-		
-		lines.addAll(buildWeights(inputLayer,hiddenLayer));
-		lines.addAll(buildWeights(hiddenLayer,outputLayer));
-		
+
+		lines.addAll(buildWeights(inputLayer, hiddenLayer));
+		lines.addAll(buildWeights(hiddenLayer, outputLayer));
 
 	}
-	
-	public List<Line> buildWeights(List<Circle> layer1, List<Circle> layer2){
+
+	public List<Line> buildWeights(List<Circle> layer1, List<Circle> layer2) {
 		List<Line> lines = new ArrayList<>();
-		for(Circle outerCircle : layer1) {
-			for(Circle innerCircle : layer2) {
-				Line line= new Line(outerCircle.getTranslateX(),outerCircle.getTranslateY(),innerCircle.getTranslateX(),innerCircle.getTranslateY());
+		for (Circle outerCircle : layer1) {
+			for (Circle innerCircle : layer2) {
+				Line line = new Line(outerCircle.getTranslateX(), outerCircle.getTranslateY(),
+						innerCircle.getTranslateX(), innerCircle.getTranslateY());
 				line.setStroke(Color.YELLOW);
 				line.setOpacity(0.4);
 				lines.add(line);
