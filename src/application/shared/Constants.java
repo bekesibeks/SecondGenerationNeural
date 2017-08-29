@@ -11,31 +11,28 @@ public class Constants {
 	public static final int CAR_DEFAULT_LENGTH = 40;
 	public static final int CAR_DEFAULT_WIDTH = 20;
 
-	public static final int CAR_DEFAULT_X_COORDINATE = 900;
-	public static final int CAR_DEFAULT_Y_COORDINATE = 40;
+	public static final int CAR_DEFAULT_X_COORDINATE = 960;
+	public static final int CAR_DEFAULT_Y_COORDINATE = 45;
 
 	public static final int CAR_DEFAULT_DIRECTION = 180; // left
 	public static final int CAR_RADAR_RANGE = 500;
 	public static final int CAR_RADAR_RANGE_DIAGONAL = (int) Math.sqrt(CAR_RADAR_RANGE * CAR_RADAR_RANGE / 2);
 
 	public static final double CAR_DEFAULT_SPEED = 10;
-	public static final double CAR_MAX_ROTATION = 12;
+	public static final double CAR_MAX_ROTATION = 7;
 
 	/*
 	 * Neural network related stuff
 	 */
 	public static final double NETWORK_DEFAULT_BIAS = -1;
 
-	public static final int NETWORK_HIDDEN_LAYER_SIZE = 2;
-
 	public static final int NETWORK_INPUT_LAYER_SIZE = 5;
-	public static final int NETWORK_FIRST_HIDDEN_LAYER_SIZE = 8;
-	public static final int NETWORK_SECOND_HIDDEN_LAYER_SIZE = 3;
+	public static final int NETWORK_HIDDEN_LAYER_SIZE = 8;
 	public static final int NETWORK_OUTPUT_LAYER_SIZE = 2;
 
-	public static final int NETWORK_POPULATION_SIZE = 14;
+	public static final int NETWORK_POPULATION_SIZE = 20;
 	public static final double NETWORK_MAX_FITNESS = 10000.0d;
-	public static final double NETWORK_WEIGHT_RANGE = 5;
+	public static final double NETWORK_WEIGHT_RANGE = 10;
 
 	public static final double MUTATION_PROBABILITY = 0.15;
 	public static final double MUTATION_AMOUNT = 0.20;

@@ -35,6 +35,7 @@ public class ViewManager {
 
 	public void initTimeline() {
 		agent = new PopulationAgent();
+		timeline.getKeyFrames().clear();
 		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(DEFAULT_FRAME_RATE), event -> {
 			boolean allCrashed = true;
 			for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
@@ -53,7 +54,7 @@ public class ViewManager {
 					double rotationLeft = activateNetwork.get(0) * CAR_MAX_ROTATION;
 					double rotationRight = activateNetwork.get(1) * -CAR_MAX_ROTATION;
 					double rotation = rotationLeft + rotationRight;
-					// PropertiesForBinding.steerRotateProperty.set(rotation);
+
 					boolean currentCarIsAlive = mapData.isAlive();
 					if (currentCarIsAlive) {
 						map.updateMap(rotation, i);
@@ -69,7 +70,7 @@ public class ViewManager {
 				timeline.stop();
 				map.initMap();
 				agent.triggerPopulationRefresh();
-				// agent.triggerNetworkSwitch();
+
 				waitALittle();
 
 				timeline.playFromStart();

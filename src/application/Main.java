@@ -55,7 +55,6 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent e) {
 					Constants.SETTINGS_LOAD_PRETRAINED_NETWORK = false;
-					// view.restart();
 					view.initTimeline();
 					view.run();
 				}
