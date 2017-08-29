@@ -33,7 +33,7 @@ public class MapAgent {
 		scene.setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.ENTER) {
 				System.out.println("save");
-				MapLoader.saveMap(creator.getLines(), "map");
+				MapLoader.saveMap(creator.getLines(), "race_resized");
 			}
 
 			if (e.getCode() == KeyCode.SPACE) {

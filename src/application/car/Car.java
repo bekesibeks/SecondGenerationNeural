@@ -21,12 +21,17 @@ public class Car {
 	private Group carView;
 
 	public Car() {
-		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
-		URL url = Main.class.getResource("car_40x15.jpg");
-		carBody.setFill(new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
+		Rectangle carBody = buildCarTexture();
 
 		carView = new Group();
 		carView.getChildren().add(carBody);
+	}
+
+	private Rectangle buildCarTexture() {
+		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
+		URL url = Main.class.getResource("car_40x15.jpg");
+		carBody.setFill(new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
+		return carBody;
 	}
 
 	public double getDirection() {

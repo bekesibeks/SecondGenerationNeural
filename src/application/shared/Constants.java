@@ -9,17 +9,17 @@ public class Constants {
 	 * Car related properties
 	 */
 	public static final int CAR_DEFAULT_LENGTH = 40;
-	public static final int CAR_DEFAULT_WIDTH = 15;
+	public static final int CAR_DEFAULT_WIDTH = 20;
 
-	public static final int CAR_DEFAULT_X_COORDINATE = 240;
+	public static final int CAR_DEFAULT_X_COORDINATE = 400;
 	public static final int CAR_DEFAULT_Y_COORDINATE = 625;
 
 	public static final int CAR_DEFAULT_DIRECTION = 180; // left
 	public static final int CAR_RADAR_RANGE = 500;
 	public static final int CAR_RADAR_RANGE_DIAGONAL = (int) Math.sqrt(CAR_RADAR_RANGE * CAR_RADAR_RANGE / 2);
 
-	public static final double CAR_DEFAULT_SPEED = 8;
-	public static final double CAR_MAX_ROTATION = 7;
+	public static final double CAR_DEFAULT_SPEED = 12;
+	public static final double CAR_MAX_ROTATION = 10;
 
 	/*
 	 * Neural network related stuff
@@ -28,6 +28,8 @@ public class Constants {
 
 	public static final int NETWORK_INPUT_LAYER_SIZE = 5;
 	public static final int NETWORK_HIDDEN_LAYER_SIZE = 8;
+	public static final int NETWORK_FIRST_HIDDEN_LAYER_SIZE = 4;
+	public static final int NETWORK_SECOND_HIDDEN_LAYER_SIZE = 3;
 	public static final int NETWORK_OUTPUT_LAYER_SIZE = 2;
 
 	public static final int NETWORK_POPULATION_SIZE = 14;
