@@ -6,6 +6,7 @@ import static application.shared.Constants.CAR_DEFAULT_SPEED;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
+import static application.shared.Constants.DEBUG_MODE;
 import static application.shared.Constants.MAP_HEIGHT;
 import static application.shared.Constants.MAP_WIDTH;
 import static java.lang.Math.cos;
@@ -52,15 +53,16 @@ public class Map {
 		mapGroup = new Group();
 		carTrackGroup = new Group();
 
-		List<Line> loadMap = MapLoader.loadMap("test");
-		loadMap.forEach(line -> line.setStroke(Color.TRANSPARENT));
+		List<Line> loadMap = MapLoader.loadMap("race_resized");
+		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
 		mapLines.addAll(loadMap);
 		System.out.println(mapLines.size());
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
-		URL url = Main.class.getResource("race_track.jpg");
-		background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
-
+		if (!DEBUG_MODE) {
+			URL url = Main.class.getResource("race_track.jpg");
+			background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
+		}
 		mapGroup.getChildren().add(background);
 		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(carTrackGroup);
@@ -177,18 +179,6 @@ public class Map {
 								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
 
 		putCircle(radarCentralPoints.get(carIndex));
-	}
-
-	private boolean isAlive(int carIndex) {
-		for (Line line : mapLines) {
-			Shape intersect = Shape.intersect((Shape) cars.get(carIndex).getCarView().getChildren().get(0), line);
-			if (intersect.getLayoutBounds().getMaxX() > -1) {
-				return false;
-			}
-		}
-
-		return true;
-
 	}
 
 	public double calculateIntersect(Line radarLine, int carIndex) {

@@ -8,33 +8,49 @@ import java.util.List;
 public class Network implements Comparable<Network> {
 
 	private InputLayer inputLayer;
-	private NetworkLayer hiddenLayer;
+	private NetworkLayer firstHiddenLayer;
+	private NetworkLayer secondHiddenLayer;
 	private NetworkLayer outputLayer;
 
 	private double fitness;
 	private boolean isAlive;
 
-	public Network(int inputLayerSize, int hiddenLayerSize, int outputLayerSize) {
+	public Network(int inputLayerSize, int firstHiddenLayerSize, int secondHiddenLayerSize, int outputLayerSize) {
 		fitness = 0;
 		isAlive = true;
 		inputLayer = new InputLayer();
-		hiddenLayer = new NetworkLayer(hiddenLayerSize, inputLayerSize, "H");
-		outputLayer = new NetworkLayer(outputLayerSize, hiddenLayerSize, "O");
+		firstHiddenLayer = new NetworkLayer(firstHiddenLayerSize, inputLayerSize, "H1");
+		secondHiddenLayer = new NetworkLayer(secondHiddenLayerSize, firstHiddenLayerSize, "H2");
+		outputLayer = new NetworkLayer(outputLayerSize, secondHiddenLayerSize, "O ");
 	}
 
 	public List<Double> activateNetwork(List<Double> inputs) {
 		List<Double> outputFromInputLayer = inputLayer.getNormalisedInput(inputs);
-		List<Double> outputFromHiddenLayer = hiddenLayer.activateLayer(outputFromInputLayer);
-		List<Double> networkOutput = outputLayer.activateLayer(outputFromHiddenLayer);
-
-		// updateViewProperties(outputFromInputLayer, outputFromHiddenLayer,
-		// networkOutput);
+		List<Double> outputFromFirstHiddenLayer = firstHiddenLayer.activateLayer(outputFromInputLayer);
+		List<Double> outputFromSecondHiddenLayer = secondHiddenLayer.activateLayer(outputFromFirstHiddenLayer);
+		List<Double> networkOutput = outputLayer.activateLayer(outputFromSecondHiddenLayer);
 
 		return networkOutput;
 	}
 
 	public void increaseFitness() {
 		fitness += CAR_DEFAULT_SPEED;
+	}
+
+	public NetworkLayer getFirstHiddenLayer() {
+		return firstHiddenLayer;
+	}
+
+	public void setFirstHiddenLayer(NetworkLayer firstHiddenLayer) {
+		this.firstHiddenLayer = firstHiddenLayer;
+	}
+
+	public NetworkLayer getSecondHiddenLayer() {
+		return secondHiddenLayer;
+	}
+
+	public void setSecondHiddenLayer(NetworkLayer secondHiddenLayer) {
+		this.secondHiddenLayer = secondHiddenLayer;
 	}
 
 	public double getFitness() {
@@ -51,14 +67,6 @@ public class Network implements Comparable<Network> {
 
 	public void setInputLayer(InputLayer inputLayer) {
 		this.inputLayer = inputLayer;
-	}
-
-	public NetworkLayer getHiddenLayer() {
-		return hiddenLayer;
-	}
-
-	public void setHiddenLayer(NetworkLayer hiddenLayer) {
-		this.hiddenLayer = hiddenLayer;
 	}
 
 	public NetworkLayer getOutputLayer() {
@@ -88,7 +96,7 @@ public class Network implements Comparable<Network> {
 		toString.append("INPUT LAYER :\n");
 		toString.append(inputLayer + "\n");
 		toString.append("HIDDEN LAYER :\n");
-		toString.append(hiddenLayer + "\n");
+		toString.append(firstHiddenLayer + "\n");
 		toString.append("OUTPUT LAYER :\n");
 		toString.append(outputLayer + "\n");
 

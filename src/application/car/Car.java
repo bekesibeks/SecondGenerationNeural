@@ -4,12 +4,14 @@ import static application.shared.Constants.CAR_DEFAULT_DIRECTION;
 import static application.shared.Constants.CAR_DEFAULT_LENGTH;
 import static application.shared.Constants.CAR_DEFAULT_SPEED;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
+import static application.shared.Constants.DEBUG_MODE;
 
 import java.net.URL;
 
 import application.Main;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -29,8 +31,14 @@ public class Car {
 
 	private Rectangle buildCarTexture() {
 		Rectangle carBody = new Rectangle(CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH);
-		URL url = Main.class.getResource("car_40x15.jpg");
-		carBody.setFill(new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
+		if (!DEBUG_MODE) {
+			URL url = Main.class.getResource("car_40x15.jpg");
+			carBody.setFill(
+					new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
+		} else {
+			carBody.setStroke(Color.ALICEBLUE);
+		}
+
 		return carBody;
 	}
 

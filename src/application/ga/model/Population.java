@@ -1,8 +1,9 @@
 package application.ga.model;
 
-import static application.shared.Constants.NETWORK_HIDDEN_LAYER_SIZE;
+import static application.shared.Constants.NETWORK_FIRST_HIDDEN_LAYER_SIZE;
 import static application.shared.Constants.NETWORK_INPUT_LAYER_SIZE;
 import static application.shared.Constants.NETWORK_OUTPUT_LAYER_SIZE;
+import static application.shared.Constants.NETWORK_SECOND_HIDDEN_LAYER_SIZE;
 import static application.shared.Constants.SETTINGS_LOAD_PRETRAINED_NETWORK;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class Population {
 			if (SETTINGS_LOAD_PRETRAINED_NETWORK) {
 				network = NetworkLoader.loadNetwork();
 			} else {
-				network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE, NETWORK_OUTPUT_LAYER_SIZE);
+				network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_FIRST_HIDDEN_LAYER_SIZE,
+						NETWORK_SECOND_HIDDEN_LAYER_SIZE, NETWORK_OUTPUT_LAYER_SIZE);
 			}
 			networks.add(network);
 		}

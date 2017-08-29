@@ -3,13 +3,9 @@ package mapcreator;
 import static application.shared.Constants.MAP_HEIGHT;
 import static application.shared.Constants.MAP_WIDTH;
 
-import java.net.URL;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -22,8 +18,9 @@ public class Main extends Application {
 
 			MapAgent agent = new MapAgent(root, scene);
 			Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
-			URL url = Main.class.getResource("race-resized.jpg");
-			background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
+			// URL url = Main.class.getResource("race-resized.jpg");
+			// background.setFill(new ImagePattern(new Image(url.toString(),
+			// MAP_WIDTH, MAP_HEIGHT, false, true)));
 			// List<Line> loadMap = MapLoader.loadMap("test");
 
 			root.getChildren().addAll(background);
