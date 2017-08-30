@@ -10,6 +10,7 @@ import java.net.URL;
 
 import application.Main;
 import javafx.scene.Group;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -52,6 +53,11 @@ public class Car {
 				carBody.setStroke(Color.WHITE);
 			}
 			carBody.setStrokeType(StrokeType.INSIDE);
+			carBody.setStrokeWidth(2);
+			GaussianBlur gaussianBlur = new GaussianBlur();
+			gaussianBlur.setRadius(3);
+			carBody.setEffect(gaussianBlur);
+			carBody.setOpacity(0.6);
 
 		}
 

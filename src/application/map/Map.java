@@ -21,6 +21,7 @@ import application.car.Car;
 import application.car.Radar;
 import application.shared.Constants;
 import javafx.scene.Group;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -54,7 +55,7 @@ public class Map {
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
 		buildMapTexture(background);
 
-		mapGroup.getChildren().add(background);
+//		mapGroup.getChildren().add(background);
 		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(carTrackGroup);
 
@@ -78,7 +79,13 @@ public class Map {
 
 	private void loadTrack(String map) {
 		List<Line> loadMap = MapLoader.loadMap(Constants.MAP_NAME);
-		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
+		GaussianBlur gaussianBlur = new GaussianBlur();
+		gaussianBlur.setRadius(3);
+		loadMap.forEach(line -> {
+			line.setStroke(Color.YELLOW);
+			line.setEffect(gaussianBlur);
+			line.setOpacity(0.9);
+		});
 		mapLines.addAll(loadMap);
 	}
 
