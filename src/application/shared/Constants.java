@@ -35,7 +35,7 @@ public class Constants {
 	public static final int NETWORK_OUTPUT_LAYER_SIZE = 2;
 
 	public static final int NETWORK_POPULATION_SIZE = 20;
-	public static final double NETWORK_MAX_FITNESS = 10000.0d;
+	public static final double NETWORK_MAX_FITNESS = 7000.0d;
 
 	public static final double MUTATION_PROBABILITY = 0.15;
 	public static final double MUTATION_AMOUNT = 0.20;
@@ -47,6 +47,6 @@ public class Constants {
 	public static boolean SETTINGS_LOAD_PRETRAINED_NETWORK = false;
 
 	public static final boolean DEBUG_MODE = true;
-	public static final String MAP_NAME = "map-medium";
+	public static final String MAP_NAME = "map-hard";
 
 }

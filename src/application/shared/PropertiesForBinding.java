@@ -10,4 +10,6 @@ public class PropertiesForBinding {
 	public static DoubleProperty steerRotateProperty = new SimpleDoubleProperty();
 
 	public static IntegerProperty populationProperty = new SimpleIntegerProperty();
+
+	public static DoubleProperty topFitnessProperty = new SimpleDoubleProperty();
 }

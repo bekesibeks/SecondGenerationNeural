@@ -15,6 +15,7 @@ import application.map.Map;
 import application.map.MapData;
 import application.shared.Constants;
 import application.shared.NetworkLoader;
+import application.shared.PropertiesForBinding;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -62,6 +63,7 @@ public class ViewManager {
 						map.updateMap(rotation, i);
 						allCrashed = false;
 						activeNetwork.increaseFitness();
+						PropertiesForBinding.topFitnessProperty.set(round(activeNetwork.getFitness(),4));
 					} else {
 						activeNetwork.setAlive(false);
 					}
@@ -95,7 +97,16 @@ public class ViewManager {
 		map.initMap();
 
 	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
 
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
+	}
+	
 	private void waitALittle() {
 		try {
 			Thread.sleep(100);
