@@ -49,10 +49,7 @@ public class Map {
 		mapGroup = new Group();
 		carTrackGroup = new Group();
 
-		List<Line> loadMap = MapLoader.loadMap("race_resized");
-		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
-		mapLines.addAll(loadMap);
-		System.out.println(mapLines.size());
+		loadTrack("map-medium");
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
 		buildMapTexture(background);
@@ -77,6 +74,12 @@ public class Map {
 		}
 
 		initMap();
+	}
+
+	private void loadTrack(String map) {
+		List<Line> loadMap = MapLoader.loadMap("map-medium");
+		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
+		mapLines.addAll(loadMap);
 	}
 
 	private void buildMapTexture(Rectangle background) {

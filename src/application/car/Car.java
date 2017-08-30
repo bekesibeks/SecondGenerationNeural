@@ -27,7 +27,6 @@ public class Car {
 
 	public Car() {
 		numberOfCar++;
-		System.out.println(numberOfCar);
 
 		Rectangle carBody = buildCarTexture();
 
@@ -44,11 +43,11 @@ public class Car {
 		} else {
 			carBody.setFill(Color.TRANSPARENT);
 			if (numberOfCar <= 4) {
-				carBody.setStroke(Color.ORANGE);
+				carBody.setStroke(Color.MEDIUMTURQUOISE);
 			} else if (numberOfCar <= 5) {
 				carBody.setStroke(Color.RED);
 			} else if (numberOfCar <= 6) {
-				carBody.setStroke(Color.DARKGREEN);
+				carBody.setStroke(Color.GREEN);
 			} else {
 				carBody.setStroke(Color.WHITE);
 			}

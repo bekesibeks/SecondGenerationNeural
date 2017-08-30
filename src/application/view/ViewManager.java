@@ -3,6 +3,7 @@ package application.view;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_MAX_ROTATION;
 import static application.shared.Constants.DEFAULT_FRAME_RATE;
+import static application.shared.Constants.NETWORK_MAX_FITNESS;
 import static javafx.animation.Animation.INDEFINITE;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import application.ga.model.Network;
 import application.map.Map;
 import application.map.MapData;
 import application.shared.Constants;
+import application.shared.NetworkLoader;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -63,6 +65,14 @@ public class ViewManager {
 					} else {
 						activeNetwork.setAlive(false);
 					}
+
+					if (activeNetwork.getFitness() > 1) {
+						NetworkLoader.saveNetwork(activeNetwork, NETWORK_MAX_FITNESS);
+						timeline.stop();
+						waitALittle();
+						System.out.println("WIN");
+					}
+
 				}
 			}
 

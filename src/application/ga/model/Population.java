@@ -30,6 +30,10 @@ public class Population {
 			Network network;
 			if (SETTINGS_LOAD_PRETRAINED_NETWORK) {
 				network = NetworkLoader.loadNetwork();
+				NetworkGenomeConverter converter = new NetworkGenomeConverter();
+				Genome genome = converter.buildGenomeFromNetwork(network);
+				Genome mutatedGenome = CrossoverUtil.mutate(genome);
+				network = converter.buildNetworkFromGenome(mutatedGenome);
 			} else {
 				network = new Network(NETWORK_INPUT_LAYER_SIZE, NETWORK_HIDDEN_LAYER_SIZE, NETWORK_OUTPUT_LAYER_SIZE);
 			}

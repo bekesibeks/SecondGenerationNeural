@@ -80,7 +80,7 @@ public class CrossoverUtil {
 		return childs;
 	}
 
-	private static Genome mutate(Genome genome) {
+	public static Genome mutate(Genome genome) {
 		for (int i = 0; i < genome.getWeights().size(); i++) {
 			if (Math.random() < Constants.MUTATION_PROBABILITY) {
 				Double currentWeight = genome.getWeights().get(i);
