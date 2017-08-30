@@ -77,7 +77,7 @@ public class Map {
 	}
 
 	private void loadTrack(String map) {
-		List<Line> loadMap = MapLoader.loadMap("map-medium");
+		List<Line> loadMap = MapLoader.loadMap(Constants.MAP_NAME);
 		loadMap.forEach(line -> line.setStroke(Color.YELLOW));
 		mapLines.addAll(loadMap);
 	}
