@@ -12,7 +12,7 @@ public class Constants {
 	public static final int CAR_DEFAULT_WIDTH = 20;
 
 	public static final int CAR_DEFAULT_X_COORDINATE = 950;
-	public static final int CAR_DEFAULT_Y_COORDINATE = 50;
+	public static final int CAR_DEFAULT_Y_COORDINATE = 40;
 
 	// public static final int CAR_DEFAULT_X_COORDINATE = 980;
 	// public static final int CAR_DEFAULT_Y_COORDINATE = 30;
@@ -47,6 +47,6 @@ public class Constants {
 	public static boolean SETTINGS_LOAD_PRETRAINED_NETWORK = false;
 
 	public static final boolean DEBUG_MODE = true;
-	public static final String MAP_NAME = "map-hard";
+	public static final String MAP_NAME = "map-medium";
 
 }

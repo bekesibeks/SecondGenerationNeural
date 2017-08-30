@@ -52,7 +52,7 @@ public class Main extends Application {
 				}
 			});
 
-			Button stopButton = new Button("stop ");
+			Button stopButton = new Button("stop");
 			buttonGroup.getChildren().add(stopButton);
 			stopButton.setTranslateX(130);
 
@@ -64,9 +64,10 @@ public class Main extends Application {
 				}
 			});
 
-			Button startPretrained = new Button("start pretrained");
+			Button startPretrained = new Button("continue");
 			buttonGroup.getChildren().add(startPretrained);
 			startPretrained.setTranslateY(60);
+			startPretrained.setTranslateX(40);
 
 			startPretrained.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
