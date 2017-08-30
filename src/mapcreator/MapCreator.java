@@ -9,16 +9,12 @@ import javafx.scene.shape.Line;
 
 public class MapCreator {
 
-	private final int WIDTH;
-	private final int HEIGHT;
 	private List<Line> lines;
 
 	private boolean firstPoint;
 	private Point2D previousPoint;
 
 	public MapCreator(int width, int height) {
-		WIDTH = width;
-		HEIGHT = height;
 		lines = new ArrayList<>();
 		firstPoint = true;
 	}
@@ -44,8 +40,5 @@ public class MapCreator {
 	public List<Line> getLines() {
 		return lines;
 	}
-
-	
-	
 
 }

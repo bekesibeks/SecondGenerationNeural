@@ -32,12 +32,8 @@ import javafx.scene.transform.Rotate;
 import mapcreator.MapLoader;
 
 public class Map {
-	// private final Car car;
 	private final List<Car> cars;
-
-	// private final Radar radar;
 	private final List<Radar> radars;
-	// private final Circle radarCentralPoint;
 	private final List<Circle> radarCentralPoints;
 
 	private final Group mapGroup;
@@ -59,10 +55,8 @@ public class Map {
 		System.out.println(mapLines.size());
 
 		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
-		if (!DEBUG_MODE) {
-			URL url = Main.class.getResource("race_track.jpg");
-			background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
-		}
+		buildMapTexture(background);
+
 		mapGroup.getChildren().add(background);
 		mapGroup.getChildren().addAll(mapLines);
 		mapGroup.getChildren().addAll(carTrackGroup);
@@ -83,6 +77,15 @@ public class Map {
 		}
 
 		initMap();
+	}
+
+	private void buildMapTexture(Rectangle background) {
+		if (!DEBUG_MODE) {
+			URL url = Main.class.getResource("race_track.jpg");
+			background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
+		} else {
+			background.setId("background");
+		}
 	}
 
 	public void initMap() {
@@ -177,8 +180,6 @@ public class Map {
 				.setTranslateY(radarCentralPoints.get(carIndex).getTranslateY()
 						+ sin((Math.PI / 180) * cars.get(carIndex).getDirection())
 								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
-
-		putCircle(radarCentralPoints.get(carIndex));
 	}
 
 	public double calculateIntersect(Line radarLine, int carIndex) {
@@ -209,16 +210,6 @@ public class Map {
 		double distanceY = Math.abs(fromY - toY);
 		double currentDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		return currentDistance;
-	}
-
-	private void putCircle(Circle radarCentralPoint2) {
-		Circle circle = new Circle(2);
-		circle.setFill(Color.BLACK);
-		circle.setOpacity(0.1);
-		circle.setTranslateX(radarCentralPoint2.getTranslateX());
-		circle.setTranslateY(radarCentralPoint2.getTranslateY());
-		carTrackGroup.getChildren().add(circle);
-
 	}
 
 	public Group getCircleGroup() {

@@ -18,7 +18,7 @@ public class CrossoverUtil {
 	/*
 	 * Select the top 2 genome. Crossover them twice to make 4 child. Then apply
 	 * class roulett wheel selection. Add 1 tottaly random genome to keep up
-	 * diversity
+	 * diversity, and add the best, to keep up fitness
 	 */
 	public static List<Genome> crossoverGenomes(List<Genome> originalPopulation) {
 		Collections.sort(originalPopulation);
@@ -34,17 +34,19 @@ public class CrossoverUtil {
 				newPopulation.addAll(firstChilds2);
 			}
 		}
+
 		newPopulation.add(bestGenomes.get(0));
 
+		Genome randomGenome = new Genome(bestGenomes.get(0).getWeights().size());
+		newPopulation.add(randomGenome);
+
 		List<Genome> rouletteWheelSelection = rouletteWheelSelection(originalPopulation,
-				NETWORK_POPULATION_SIZE - newPopulation.size() - 1);
+				NETWORK_POPULATION_SIZE - newPopulation.size());
 		for (int i = 0; i < rouletteWheelSelection.size() - 1; i += 2) {
 			List<Genome> firstChilds = crossover(rouletteWheelSelection.get(i), rouletteWheelSelection.get(i + 1));
 			newPopulation.addAll(firstChilds);
 		}
 
-		Genome randomGenome = new Genome(bestGenomes.get(0).getWeights().size());
-		newPopulation.add(randomGenome);
 		newPopulation.stream().forEach(CrossoverUtil::mutate);
 
 		return newPopulation;
@@ -84,10 +86,23 @@ public class CrossoverUtil {
 				Double currentWeight = genome.getWeights().get(i);
 				Double mutation = getRandomInRange(MUTATION_AMOUNT * NETWORK_WEIGHT_RANGE);
 				Double newWeight = currentWeight + mutation;
+
+				newWeight = normalizeWeight(newWeight);
+
 				genome.getWeights().set(i, newWeight);
 			}
 		}
 		return genome;
+	}
+
+	private static Double normalizeWeight(Double newWeight) {
+		if (newWeight > NETWORK_WEIGHT_RANGE) {
+			newWeight = NETWORK_WEIGHT_RANGE;
+		}
+		if (newWeight < -NETWORK_WEIGHT_RANGE) {
+			newWeight = -NETWORK_WEIGHT_RANGE;
+		}
+		return newWeight;
 	}
 
 	private static List<Genome> selectBestGenomes(List<Genome> originalPopulation) {

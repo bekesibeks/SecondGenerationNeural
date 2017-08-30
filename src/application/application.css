@@ -1,19 +1,11 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
-#carBody {
-	-fx-fill: #ccddee;
-}
-
-#mapBackground {
-	-fx-fill: #222222;
-}
-
 #background {
-	-fx-background-color: #111111;
+	 -fx-fill: linear-gradient(from 10.0% 10.0% to 100.0% 100.0%,  #4F5759,#1F2628);
 }
 
 #text {
-	 -fx-font: 32px "Serif";
+	 -fx-font: 32.0px "Serif";
 }
 
 

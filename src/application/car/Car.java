@@ -14,8 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 public class Car {
+
+	private static int numberOfCar = 0;
 
 	private double direction = CAR_DEFAULT_DIRECTION;
 	private double speed = CAR_DEFAULT_SPEED;
@@ -23,6 +26,9 @@ public class Car {
 	private Group carView;
 
 	public Car() {
+		numberOfCar++;
+		System.out.println(numberOfCar);
+
 		Rectangle carBody = buildCarTexture();
 
 		carView = new Group();
@@ -36,10 +42,22 @@ public class Car {
 			carBody.setFill(
 					new ImagePattern(new Image(url.toString(), CAR_DEFAULT_LENGTH, CAR_DEFAULT_WIDTH, false, true)));
 		} else {
-			carBody.setStroke(Color.ALICEBLUE);
+			carBody.setFill(Color.TRANSPARENT);
+			if (numberOfCar <= 4) {
+				carBody.setStroke(Color.ORANGE);
+			} else if (numberOfCar <= 5) {
+				carBody.setStroke(Color.RED);
+			} else if (numberOfCar <= 6) {
+				carBody.setStroke(Color.DARKGREEN);
+			} else {
+				carBody.setStroke(Color.WHITE);
+			}
+			carBody.setStrokeType(StrokeType.INSIDE);
+
 		}
 
 		return carBody;
+
 	}
 
 	public double getDirection() {

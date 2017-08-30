@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.ga.model.Genome;
-import application.shared.Constants;
 
 public class RouletteWheelSelection {
 
 	public static List<Genome> rouletteWheelSelection(List<Genome> genomes, int count) {
-		List<Double> weight = genomes.stream().map(genome -> genome.getFitness() / NETWORK_MAX_FITNESS).collect(toList());
+		List<Double> weight = genomes.stream().map(genome -> genome.getFitness() / NETWORK_MAX_FITNESS)
+				.collect(toList());
 		List<Genome> selectedGenomes = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
 			selectedGenomes.add(genomes.get(rouletteSelect(weight)));
@@ -29,8 +29,9 @@ public class RouletteWheelSelection {
 		double value = randUniformPositive() * sumOfWeights;
 		for (int i = 0; i < weight.size(); i++) {
 			value -= weight.get(i);
-			if (value <= 0)
+			if (value <= 0) {
 				return i;
+			}
 		}
 		return 0;
 	}
