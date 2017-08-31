@@ -7,6 +7,8 @@ import static application.shared.Constants.SETTINGS_LOAD_PRETRAINED_NETWORK;
 import application.map.Map;
 import application.shared.PropertiesForBinding;
 import application.view.ViewManager;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -23,6 +26,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
 	private static int X = (int) MAP_WIDTH;
@@ -39,7 +43,6 @@ public class Main extends Application {
 
 			Map map = new Map();
 			Group mapGroup = map.getMapGroup();
-			view = new ViewManager(map);
 
 			Group buttonGroup = createButtons();
 
@@ -58,11 +61,57 @@ public class Main extends Application {
 			root.getChildren().add(effectedGroup);
 			root.getChildren().add(buttonGroup);
 
+			SequentialTransition winAnimation = createWinAnimation(root);
+			view = new ViewManager(map, winAnimation);
+
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private SequentialTransition createWinAnimation(BorderPane root) {
+		Group group = new Group();
+		group.setTranslateY(-250);
+		Rectangle rect = new Rectangle(MAP_WIDTH, 150);
+		rect.setOpacity(0.8);
+		rect.setId("background");
+		GaussianBlur gaussianBlur = new GaussianBlur();
+		gaussianBlur.setRadius(40);
+		rect.setEffect(gaussianBlur);
+		Text text = new Text("Network passed the map");
+		text.setTranslateX(MAP_WIDTH / 2 - 230);
+		text.setTranslateY(75);
+		text.setFill(Color.WHITE);
+		text.setId("biggertext");
+
+		group.getChildren().add(rect);
+		group.getChildren().add(text);
+		SequentialTransition animation = new SequentialTransition();
+
+		TranslateTransition down = new TranslateTransition();
+		down.setDuration(Duration.seconds(1));
+		down.setToY(MAP_HEIGHT / 2);
+		down.setNode(group);
+
+		TranslateTransition up1 = new TranslateTransition();
+		up1.setDuration(Duration.seconds(2));
+		up1.setToY(MAP_HEIGHT / 2 - 100);
+		up1.setNode(group);
+
+		TranslateTransition up2 = new TranslateTransition();
+		up2.setDuration(Duration.seconds(1));
+		up2.setToY(-250);
+		up2.setNode(group);
+
+		animation.getChildren().add(down);
+		animation.getChildren().add(up1);
+		animation.getChildren().add(up2);
+
+		root.getChildren().add(group);
+
+		return animation;
 	}
 
 	private Rectangle buildColorsMask() {
@@ -101,7 +150,7 @@ public class Main extends Application {
 			public void handle(ActionEvent e) {
 				view.triggerNextMap();
 				view.initTimeline();
-				// view.run();
+				PropertiesForBinding.populationProperty.set(0);
 			}
 		});
 

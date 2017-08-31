@@ -5,6 +5,7 @@ import static application.shared.Constants.CAR_MAX_ROTATION;
 import static application.shared.Constants.DEFAULT_FRAME_RATE;
 import static application.shared.Constants.MAP_INDEX;
 import static application.shared.Constants.NETWORK_MAX_FITNESS;
+import static application.shared.Constants.SETTINGS_LOAD_PRETRAINED_NETWORK;
 import static javafx.animation.Animation.INDEFINITE;
 
 import java.util.ArrayList;
@@ -18,7 +19,10 @@ import application.shared.Constants;
 import application.shared.NetworkLoader;
 import application.shared.PropertiesForBinding;
 import javafx.animation.KeyFrame;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 public class ViewManager {
@@ -26,10 +30,12 @@ public class ViewManager {
 	private final Map map;
 	private PopulationAgent agent;
 	private final Timeline timeline;
+	private final SequentialTransition winAnimation;
 
-	public ViewManager(Map map) {
+	public ViewManager(Map map, SequentialTransition winAnimation) {
 		this.map = map;
 		this.timeline = new Timeline();
+		this.winAnimation = winAnimation;
 	}
 
 	public void run() {
@@ -70,10 +76,7 @@ public class ViewManager {
 					}
 
 					if (activeNetwork.getFitness() > 1) {
-						NetworkLoader.saveNetwork(activeNetwork, NETWORK_MAX_FITNESS);
-						timeline.stop();
-						waitALittle();
-						System.out.println("WIN");
+						win(activeNetwork);
 					}
 
 				}
@@ -96,13 +99,34 @@ public class ViewManager {
 	public void stop() {
 		timeline.stop();
 		map.initMap();
-
 	}
 
 	public void triggerNextMap() {
 		MAP_INDEX++;
 		map.initMap();
 		map.loadTrack();
+	}
+
+	private void win(Network activeNetwork) {
+		timeline.stop();
+		waitALittle();
+		NetworkLoader.saveNetwork(activeNetwork, NETWORK_MAX_FITNESS);
+		winAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				triggerNextMap();
+				initTimeline();
+				PropertiesForBinding.populationProperty.set(0);
+				waitALittle();
+				waitALittle();
+				waitALittle();
+				SETTINGS_LOAD_PRETRAINED_NETWORK = true;
+				initTimeline();
+				run();
+			}
+		});
+		winAnimation.play();
+		System.out.println("WIN");
 	}
 
 	private double round(double value, int places) {

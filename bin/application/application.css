@@ -8,6 +8,10 @@
 	 -fx-font: 20.0px "Consolas";
 }
 
+#biggertext {
+	 -fx-font: 40.0px "Consolas";
+}
+
 
 .button {
     -fx-padding: 5.0 22.0 5.0 22.0;   
