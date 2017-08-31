@@ -63,7 +63,7 @@ public class ViewManager {
 						map.updateMap(rotation, i);
 						allCrashed = false;
 						activeNetwork.increaseFitness();
-						PropertiesForBinding.topFitnessProperty.set(round(activeNetwork.getFitness(),4));
+						PropertiesForBinding.topFitnessProperty.set(round(activeNetwork.getFitness(),2));
 					} else {
 						activeNetwork.setAlive(false);
 					}
