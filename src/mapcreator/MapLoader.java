@@ -53,6 +53,7 @@ public class MapLoader {
 
 				line = bw.readLine();
 			}
+			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

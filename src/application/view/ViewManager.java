@@ -3,6 +3,7 @@ package application.view;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_MAX_ROTATION;
 import static application.shared.Constants.DEFAULT_FRAME_RATE;
+import static application.shared.Constants.MAP_INDEX;
 import static application.shared.Constants.NETWORK_MAX_FITNESS;
 import static javafx.animation.Animation.INDEFINITE;
 
@@ -29,7 +30,6 @@ public class ViewManager {
 	public ViewManager(Map map) {
 		this.map = map;
 		this.timeline = new Timeline();
-		// initTimeline();
 	}
 
 	public void run() {
@@ -39,6 +39,7 @@ public class ViewManager {
 	public void initTimeline() {
 		agent = new PopulationAgent();
 		timeline.getKeyFrames().clear();
+
 		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(DEFAULT_FRAME_RATE), event -> {
 			boolean allCrashed = true;
 			for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
@@ -63,7 +64,7 @@ public class ViewManager {
 						map.updateMap(rotation, i);
 						allCrashed = false;
 						activeNetwork.increaseFitness();
-						PropertiesForBinding.topFitnessProperty.set(round(activeNetwork.getFitness(),2));
+						PropertiesForBinding.topFitnessProperty.set(round(activeNetwork.getFitness(), 2));
 					} else {
 						activeNetwork.setAlive(false);
 					}
@@ -97,16 +98,24 @@ public class ViewManager {
 		map.initMap();
 
 	}
-	
-	public static double round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
 
-	    long factor = (long) Math.pow(10, places);
-	    value = value * factor;
-	    long tmp = Math.round(value);
-	    return (double) tmp / factor;
+	public void triggerNextMap() {
+		MAP_INDEX++;
+		map.initMap();
+		map.loadTrack();
 	}
-	
+
+	private double round(double value, int places) {
+		if (places < 0) {
+			throw new IllegalArgumentException();
+		}
+
+		long factor = (long) Math.pow(10, places);
+		value = value * factor;
+		long tmp = Math.round(value);
+		return (double) tmp / factor;
+	}
+
 	private void waitALittle() {
 		try {
 			Thread.sleep(100);

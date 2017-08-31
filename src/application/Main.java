@@ -43,14 +43,7 @@ public class Main extends Application {
 
 			Group buttonGroup = createButtons();
 
-			Rectangle colors = new Rectangle(MAP_WIDTH, MAP_HEIGHT,
-					new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE,
-							new Stop[] { new Stop(0, Color.web("#f8bd55")), new Stop(0.14, Color.web("#c0fe56")),
-									new Stop(0.28, Color.web("#5dfbc1")), new Stop(0.43, Color.web("#64c2f8")),
-									new Stop(0.57, Color.web("#be4af7")), new Stop(0.71, Color.web("#ed5fc2")),
-									new Stop(0.85, Color.web("#ef504c")), new Stop(1, Color.web("#f2660f")), }));
-
-			colors.setBlendMode(BlendMode.OVERLAY);
+			Rectangle colors = buildColorsMask();
 
 			Text text = createText(310, 260);
 			text.textProperty()
@@ -72,6 +65,17 @@ public class Main extends Application {
 		}
 	}
 
+	private Rectangle buildColorsMask() {
+		Rectangle colors = new Rectangle(MAP_WIDTH, MAP_HEIGHT,
+				new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE,
+						new Stop[] { new Stop(0, Color.web("#f8bd55")), new Stop(0.14, Color.web("#c0fe56")),
+								new Stop(0.28, Color.web("#5dfbc1")), new Stop(0.43, Color.web("#64c2f8")),
+								new Stop(0.57, Color.web("#be4af7")), new Stop(0.71, Color.web("#ed5fc2")),
+								new Stop(0.85, Color.web("#ef504c")), new Stop(1, Color.web("#f2660f")), }));
+		colors.setBlendMode(BlendMode.OVERLAY);
+		return colors;
+	}
+
 	private Group createButtons() {
 		Group buttonGroup = new Group();
 		buttonGroup.setTranslateX(510);
@@ -91,6 +95,15 @@ public class Main extends Application {
 		startPretrained.setTranslateY(40);
 		triggerNextMap.setTranslateX(150);
 		triggerNextMap.setTranslateY(40);
+
+		triggerNextMap.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				view.triggerNextMap();
+				view.initTimeline();
+				// view.run();
+			}
+		});
 
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

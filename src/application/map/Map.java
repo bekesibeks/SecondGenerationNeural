@@ -6,28 +6,22 @@ import static application.shared.Constants.CAR_DEFAULT_SPEED;
 import static application.shared.Constants.CAR_DEFAULT_WIDTH;
 import static application.shared.Constants.CAR_DEFAULT_X_COORDINATE;
 import static application.shared.Constants.CAR_DEFAULT_Y_COORDINATE;
-import static application.shared.Constants.DEBUG_MODE;
-import static application.shared.Constants.MAP_HEIGHT;
-import static application.shared.Constants.MAP_WIDTH;
+import static application.shared.Constants.MAPS;
+import static application.shared.Constants.MAP_INDEX;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.Main;
 import application.car.Car;
 import application.car.Radar;
 import application.shared.Constants;
 import javafx.scene.Group;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import mapcreator.MapLoader;
@@ -38,9 +32,9 @@ public class Map {
 	private final List<Circle> radarCentralPoints;
 
 	private final Group mapGroup;
-	private final Group carTrackGroup;
 
 	private final List<Line> mapLines;
+	private final Group mapLinesGroup;
 
 	public Map() {
 		mapLines = new ArrayList<>();
@@ -48,16 +42,11 @@ public class Map {
 		radars = new ArrayList<>();
 		radarCentralPoints = new ArrayList<>();
 		mapGroup = new Group();
-		carTrackGroup = new Group();
+		mapLinesGroup = new Group();
 
-		loadTrack("map-medium");
+		loadTrack();
 
-		Rectangle background = new Rectangle(MAP_WIDTH, MAP_HEIGHT);
-		buildMapTexture(background);
-
-//		mapGroup.getChildren().add(background);
-		mapGroup.getChildren().addAll(mapLines);
-		mapGroup.getChildren().addAll(carTrackGroup);
+		mapGroup.getChildren().addAll(mapLinesGroup);
 
 		for (int i = 0; i < Constants.NETWORK_POPULATION_SIZE; i++) {
 			Car car = new Car();
@@ -75,27 +64,6 @@ public class Map {
 		}
 
 		initMap();
-	}
-
-	private void loadTrack(String map) {
-		List<Line> loadMap = MapLoader.loadMap(Constants.MAP_NAME);
-		GaussianBlur gaussianBlur = new GaussianBlur();
-		gaussianBlur.setRadius(3);
-		loadMap.forEach(line -> {
-			line.setStroke(Color.YELLOW);
-			line.setEffect(gaussianBlur);
-			line.setOpacity(0.9);
-		});
-		mapLines.addAll(loadMap);
-	}
-
-	private void buildMapTexture(Rectangle background) {
-		if (!DEBUG_MODE) {
-			URL url = Main.class.getResource("race_track.jpg");
-			background.setFill(new ImagePattern(new Image(url.toString(), MAP_WIDTH, MAP_HEIGHT, false, true)));
-		} else {
-			background.setId("background");
-		}
 	}
 
 	public void initMap() {
@@ -119,10 +87,6 @@ public class Map {
 			radar.getRadarView().translateXProperty().bind(car.getCarView().translateXProperty());
 			radar.getRadarView().translateYProperty().bind(car.getCarView().translateYProperty());
 		}
-	}
-
-	public void clearTrackInMap() {
-		carTrackGroup.getChildren().clear();
 	}
 
 	public MapData getMapData(int index) {
@@ -152,6 +116,21 @@ public class Map {
 		}
 
 		return mapData;
+	}
+
+	public void loadTrack() {
+		List<Line> loadMap = MapLoader.loadMap(MAPS[MAP_INDEX % MAPS.length]);
+		GaussianBlur gaussianBlur = new GaussianBlur();
+		gaussianBlur.setRadius(3);
+		loadMap.forEach(line -> {
+			line.setStroke(Color.YELLOW);
+			line.setEffect(gaussianBlur);
+			line.setOpacity(0.9);
+		});
+		mapLines.clear();
+		mapLines.addAll(loadMap);
+		mapLinesGroup.getChildren().clear();
+		mapLinesGroup.getChildren().addAll(mapLines);
 	}
 
 	private void rotateCar(double rotation, int carIndex) {
@@ -192,7 +171,7 @@ public class Map {
 								* (cars.get(carIndex).getSpeed() - speedLostCausedByRotation));
 	}
 
-	public double calculateIntersect(Line radarLine, int carIndex) {
+	private double calculateIntersect(Line radarLine, int carIndex) {
 		double minDistance = calculateDistance(radarLine);
 		for (Line line : mapLines) {
 			Shape intersectPoint = Shape.intersect(line, radarLine);
@@ -220,10 +199,6 @@ public class Map {
 		double distanceY = Math.abs(fromY - toY);
 		double currentDistance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		return currentDistance;
-	}
-
-	public Group getCircleGroup() {
-		return carTrackGroup;
 	}
 
 	public Group getMapGroup() {

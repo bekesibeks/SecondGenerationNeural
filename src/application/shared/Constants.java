@@ -47,6 +47,7 @@ public class Constants {
 	public static boolean SETTINGS_LOAD_PRETRAINED_NETWORK = false;
 
 	public static final boolean DEBUG_MODE = true;
-	public static final String MAP_NAME = "map-hard";
+	public static int MAP_INDEX = 0;
+	public static final String[] MAPS = { "map-easy", "map-medium", "map-hard" };
 
 }
