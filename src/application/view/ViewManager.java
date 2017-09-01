@@ -126,7 +126,6 @@ public class ViewManager {
 			}
 		});
 		winAnimation.play();
-		System.out.println("WIN");
 	}
 
 	private double round(double value, int places) {
